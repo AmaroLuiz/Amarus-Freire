@@ -10,25 +10,34 @@
     right: 0;
     z-index: 50;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     padding: clamp(16px, 2.4vw, 28px) clamp(16px, 3vw, 32px) 0;
     pointer-events: none;
 }
 
+/* .nav__inner (the pill) and .nav__menu (the panel) share the exact
+   same width and sit flush against each other with zero gap, so
+   together they read as ONE continuous card — not two separate
+   floating pieces. :has() lets the pill react to the panel's open
+   state (its sibling) to square off the seam between them. */
 .nav__inner {
     pointer-events: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 40px;
-    width: 100%;
-    max-width: 720px;
+    width: min(600px, 100%);
     padding: 10px 10px 10px 22px;
-    border-radius: 999px;
-    background: rgba(8, 13, 21, 0.6);
-    border: 1px solid var(--border);
+    background: rgba(8, 13, 21, 0.9);
+    border-radius: 3px;
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
+}
+
+/* divider line under the pill, only while the menu is open */
+.nav__inner:has(.nav__toggle.is-open) {
+    border-bottom: 1px solid var(--border);
 }
 
 .nav__logo {
@@ -38,7 +47,7 @@
     text-decoration: none;
     color: var(--white);
     font-family: "Michroma", var(--font-display);
-    font-weight: 400;
+    font-weight: 900;
     font-size: 13px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -79,64 +88,142 @@
     width: 12px;
 }
 
+/* open state: collapses to a single dash ("−"), not an "X" */
 .nav__toggle.is-open span:nth-child(1) {
-    transform: translateY(6.5px) rotate(45deg);
-    width: 18px;
-}
-
-.nav__toggle.is-open span:nth-child(2) {
     opacity: 0;
 }
 
+.nav__toggle.is-open span:nth-child(2) {
+    width: 18px;
+}
+
 .nav__toggle.is-open span:nth-child(3) {
-    transform: translateY(-6.5px) rotate(-45deg);
+    opacity: 0;
 }
 
 .nav__menu {
     pointer-events: none;
-    position: fixed;
-    top: clamp(76px, 9vw, 96px);
-    left: 50%;
-    transform: translate(-50%, -12px);
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    min-width: 220px;
-    padding: 14px;
-    border-radius: 18px;
-    background: rgba(8, 13, 21, 0.85);
-    border: 1px solid var(--border);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+    width: min(600px, 100%);
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.35s cubic-bezier(.16, .8, .3, 1);
     z-index: 49;
 }
 
 .nav__menu.is-open {
     pointer-events: auto;
-    opacity: 1;
-    visibility: visible;
-    transform: translate(-50%, 0);
+    grid-template-rows: 1fr;
 }
 
-.nav__menu a {
-    padding: 10px 14px;
-    border-radius: 10px;
+.nav__menu-panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+    max-height: calc(100vh - clamp(76px, 9vw, 96px) - 24px);
+    overflow-y: auto;
+    background: rgba(8, 13, 21, 0.9);
+
+    border-top: none;
+    border-radius: 0 0 20px 20px;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.65);
+}
+
+/* -------- link list -------- */
+.nav__menu-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav__menu-list li {
+    border-bottom: 1px solid var(--border);
+}
+
+.nav__menu-list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 24px;
+    color: var(--white);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(16px, 2vw, 19px);
+    transition: background 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
+}
+
+.nav__menu-list a:hover,
+.nav__menu-list a:focus-visible {
+    background: rgba(21, 94, 231, 0.1);
+    color: var(--blue);
+    padding-left: 30px;
+}
+
+/* -------- pitch-style outline link + action pair -------- */
+.nav__menu-outline {
+    margin: 12px 20px 0;
+    padding: 12px;
+    text-align: center;
+    border: 1px solid var(--border);
+    border-radius: 14px;
     color: var(--muted);
     text-decoration: none;
     font-family: var(--font-mono);
     font-size: 12px;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    transition: background 0.2s ease, color 0.2s ease;
+    transition: border-color 0.2s ease, color 0.2s ease;
 }
 
-.nav__menu a:hover,
-.nav__menu a:focus-visible {
-    background: rgba(21, 94, 231, 0.14);
+.nav__menu-outline:hover,
+.nav__menu-outline:focus-visible {
+    border-color: var(--border-blue);
     color: var(--white);
+}
+
+.nav__menu-actions {
+    display: flex;
+    gap: 10px;
+    padding: 10px 20px 14px;
+}
+
+.nav__menu-action {
+    flex: 1 1 0;
+    padding: 13px 14px;
+    text-align: center;
+    border-radius: 12px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--white);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: transform 0.2s cubic-bezier(.16, .8, .3, 1), background 0.2s ease, border-color 0.2s ease;
+}
+
+.nav__menu-action--solid {
+    background: var(--white);
+    color: var(--bg-void);
+    border-color: var(--white);
+}
+
+.nav__menu-action:hover,
+.nav__menu-action:focus-visible {
+    transform: translateY(-2px);
+    border-color: var(--border-blue);
+}
+
+.nav__menu-action--solid:hover,
+.nav__menu-action--solid:focus-visible {
+    background: var(--blue);
+    color: var(--white);
+    border-color: var(--blue);
 }
 
 /* =================================================================
@@ -296,8 +383,13 @@
         padding: 8px 8px 8px 16px;
     }
 
-    .nav__logo span {
-        display: none;
+    .nav__menu-list a {
+        padding: 16px 18px;
+        font-size: 18px;
+    }
+
+    .nav__menu-actions {
+        flex-direction: column;
     }
 
     .hero__footer {

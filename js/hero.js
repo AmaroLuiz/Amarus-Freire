@@ -38,5 +38,8 @@
         menu.querySelectorAll("a").forEach(function (a) {
             a.addEventListener("click", close);
         });
+
+        var closeBtn = menu.querySelector("[data-nav-close]");
+        if (closeBtn) closeBtn.addEventListener("click", close);
     })();
 })();

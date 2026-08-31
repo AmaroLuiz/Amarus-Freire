@@ -12,9 +12,11 @@
     var cards = Array.prototype.slice.call(section.querySelectorAll("[data-process-card]"));
     if (!track || cards.length < 2) return;
 
+    // Custom properties don't resolve to px through getComputedStyle
+    // (they stay the raw "clamp(...)" string), so this mirrors
+    // --process-top's clamp() directly in JS — keep the two in sync.
     function stickyOffset() {
-        var v = getComputedStyle(document.documentElement).getPropertyValue("--process-top");
-        return parseFloat(v) || 0;
+        return Math.min(Math.max(window.innerWidth * 0.12, 96), 140);
     }
 
     function stepDistance() {
@@ -41,7 +43,11 @@
     // opacity, not scale — is what physically drives the next panel
     // up and over the previous one; scale is only a barely-there
     // depth cue on the panel being covered.
-    mm.add("(min-width: 861px)", function () {
+    //
+    // Runs at every width (mobile included) — "all" still goes
+    // through gsap.matchMedia so it's cleanly rebuilt on resize/
+    // orientation change, it just isn't gated to a min-width.
+    mm.add("all", function () {
         cards.forEach(function (card, i) {
             gsap.set(card, { yPercent: i === 0 ? 0 : 100, y: i * STAGGER, scale: 1 });
         });

@@ -168,35 +168,38 @@
 }
 
 /* =================================================================
-   MOBILE / TABLET-NARROW — stacking off, plain readable column.
-   Matches the breakpoint already used elsewhere in the site (860px).
-   js/process.js never creates the pin/timeline below this width.
+   NARROW SCREENS — same pinned scroll-stacking effect as desktop
+   (js/process.js runs it at every width). Only the card's INTERNAL
+   layout changes: the 3-column grid (number | title+tag+list |
+   description) is far too tight under ~720px, so it collapses to a
+   single stacked column there. The positioning mechanic itself
+   (position:absolute, inset:0) stays untouched.
    ================================================================= */
-@media (max-width: 860px) {
+@media (max-width: 720px) {
     .process__track {
-        height: auto;
-        margin-bottom: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
+        /* single-column content is taller — give it more room */
+        height: clamp(560px, 94vh, 780px);
     }
 
     .process__card {
-        position: static;
-        inset: auto;
-        transform: none !important;
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-        padding: 28px 0;
+        grid-template-columns: 1fr;
+        row-gap: 20px;
+        padding: 28px 20px;
+        overflow-y: auto;
+    }
+
+    .process__num,
+    .process__main,
+    .process__card-desc {
+        grid-column: 1;
     }
 
     .process__num {
-        font-size: 40px;
+        font-size: 32px;
     }
 
     .process__card-title {
-        font-size: clamp(36px, 10vw, 52px);
+        font-size: clamp(30px, 9vw, 44px);
     }
 
     .process__card-desc {
