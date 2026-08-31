@@ -423,7 +423,7 @@
                     frames.forEach(function (f, i) { f.classList.toggle("is-active", i === idx); });
                     dots.forEach(function (d, i) {
                         d.classList.toggle("is-active", i === idx);
-                        d.setAttribute("aria-selected", i === idx ? "true" : "false");
+                        d.setAttribute("aria-pressed", i === idx ? "true" : "false");
                     });
                     if (tag && frames[idx].dataset.tag) { tag.textContent = frames[idx].dataset.tag; }
                 });

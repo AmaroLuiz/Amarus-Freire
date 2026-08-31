@@ -323,11 +323,12 @@ body {
     transform: translateX(-50%);
     margin-top: 14px;
     display: flex;
-    gap: 8px;
+    gap: 20px;
     z-index: 2;
 }
 
 .dot {
+    position: relative;
     width: 6px;
     height: 6px;
     border-radius: 50%;
@@ -336,6 +337,15 @@ body {
     background: rgba(255, 255, 255, 0.22);
     cursor: pointer;
     transition: background .3s ease, transform .3s ease;
+}
+
+/* invisible tap-target expansion — visual dot stays 6px, hit area
+   grows to ~24px (WCAG 2.2 SC 2.5.8 minimum) without touching its
+   neighbors at the 20px gap above */
+.dot::before {
+    content: "";
+    position: absolute;
+    inset: -9px;
 }
 
 .dot:hover {

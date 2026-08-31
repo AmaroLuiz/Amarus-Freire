@@ -4,9 +4,6 @@
     var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var section = document.getElementById("depoimentos");
     if (!section || reduceMotion) return;
-    if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
-
-    gsap.registerPlugin(ScrollTrigger);
 
     var viewport = section.querySelector("[data-testimonials-viewport]");
     var track = section.querySelector("[data-testimonials-track]");
@@ -30,33 +27,55 @@
         return Math.min(Math.max(window.innerWidth * 0.11, 90), 132);
     }
 
-    var mm = gsap.matchMedia();
+    function build() {
+        if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
 
-    // Only pin/scroll-jack on desktop-sized viewports (same breakpoint
-    // CSS uses to switch the track from a column to a row). Below it,
-    // testimonials.css keeps a plain, unpinned vertical column.
-    mm.add("(min-width: 861px)", function () {
-        gsap.to(track, {
-            x: function () { return -maxX(); },
-            ease: "none",
-            scrollTrigger: {
-                trigger: section,
-                start: function () { return "top top+=" + navOffset(); },
-                end: function () { return "+=" + maxX(); },
-                scrub: 1,
-                pin: true,
-                anticipatePin: 1,
-                invalidateOnRefresh: true,
-            },
+        gsap.registerPlugin(ScrollTrigger);
+        var mm = gsap.matchMedia();
+
+        // Only pin/scroll-jack on desktop-sized viewports (same breakpoint
+        // CSS uses to switch the track from a column to a row). Below it,
+        // testimonials.css keeps a plain, unpinned vertical column.
+        mm.add("(min-width: 861px)", function () {
+            gsap.to(track, {
+                x: function () { return -maxX(); },
+                ease: "none",
+                scrollTrigger: {
+                    trigger: section,
+                    start: function () { return "top top+=" + navOffset(); },
+                    end: function () { return "+=" + maxX(); },
+                    scrub: 1,
+                    pin: true,
+                    anticipatePin: 1,
+                    invalidateOnRefresh: true,
+                },
+            });
+
+            // gsap.matchMedia() auto-reverts this tween/ScrollTrigger (and
+            // the pin/spacer it created) once the query stops matching —
+            // no manual cleanup needed.
         });
 
-        // gsap.matchMedia() auto-reverts this tween/ScrollTrigger (and
-        // the pin/spacer it created) once the query stops matching —
-        // no manual cleanup needed.
-    });
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
+        }
+    }
 
-    window.addEventListener("load", function () { ScrollTrigger.refresh(); });
-    if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
+    // Same reasoning as process.js: this section is below the fold,
+    // so deferring the GSAP/ScrollTrigger pin setup to an idle moment
+    // costs nothing visible while keeping it off the critical
+    // rendering path (lower Total Blocking Time).
+    function whenIdle(fn) {
+        if ("requestIdleCallback" in window) {
+            requestIdleCallback(fn, { timeout: 2000 });
+        } else {
+            setTimeout(fn, 200);
+        }
+    }
+
+    if (document.readyState === "complete") {
+        whenIdle(build);
+    } else {
+        window.addEventListener("load", function () { whenIdle(build); });
     }
 })();

@@ -245,7 +245,13 @@
     position: absolute;
     inset: 0;
     z-index: 0;
+    /* WebP is ~95% smaller (28KB vs 548KB) — image-set() picks it
+       when supported, falling back to the PNG on anything ancient */
     background-image: url("../imagens/hero_banner_blue.png");
+    background-image: image-set(
+        url("../imagens/hero_banner_blue.webp") type("image/webp"),
+        url("../imagens/hero_banner_blue.png") type("image/png")
+    );
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -280,7 +286,7 @@
     gap: clamp(24px, 6vw, 96px);
     max-width: 1440px;
     width: 100%;
-    margin: 0 auto;
+    margin: 100px auto;
     padding: 0 clamp(20px, 5vw, 64px) clamp(64px, 9vw, 120px);
 }
 
@@ -292,9 +298,6 @@
     letter-spacing: -0.015em;
     margin: 0;
     color: var(--white);
-    opacity: 0;
-    transform: translateY(22px);
-    animation: hero-in 0.9s cubic-bezier(.16, .8, .3, 1) 0.15s forwards;
 }
 
 .hero__desc {
@@ -305,16 +308,6 @@
     max-width: 320px;
     margin: 0 0 6px;
     flex: none;
-    opacity: 0;
-    transform: translateY(22px);
-    animation: hero-in 0.9s cubic-bezier(.16, .8, .3, 1) 0.35s forwards;
-}
-
-@keyframes hero-in {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 .hero__footer {

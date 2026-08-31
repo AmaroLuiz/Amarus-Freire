@@ -1,0 +1,2543 @@
+@charset "UTF-8";
+
+/* =============================================================
+   Bundled stylesheet — hero, pain, home, offer, process, results,
+   testimonials, faq, cta, footer (in this exact cascade order).
+   Combined into one file to cut render-blocking requests from
+   10 down to 1 on first load. Keep editing the individual
+   css/*.css files per section — re-run this same concatenation
+   whenever one of them changes, this file is generated, not
+   hand-edited.
+   ============================================================= */
+
+/* ============ hero.css ============ */
+
+/* =================================================================
+   NAV
+   ================================================================= */
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: clamp(16px, 2.4vw, 28px) clamp(16px, 3vw, 32px) 0;
+    pointer-events: none;
+}
+
+/* .nav__inner (the pill) and .nav__menu (the panel) share the exact
+   same width and sit flush against each other with zero gap, so
+   together they read as ONE continuous card — not two separate
+   floating pieces. :has() lets the pill react to the panel's open
+   state (its sibling) to square off the seam between them. */
+.nav__inner {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    width: min(600px, 100%);
+    padding: 10px 10px 10px 22px;
+    background: rgba(8, 13, 21, 0.9);
+    border-radius: 3px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+/* divider line under the pill, only while the menu is open */
+.nav__inner:has(.nav__toggle.is-open) {
+    border-bottom: 1px solid var(--border);
+}
+
+.nav__logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--white);
+    font-family: "Michroma", var(--font-display);
+    font-weight: 900;
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.nav__toggle {
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 5px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    padding: 0 10px;
+    transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.nav__toggle:hover,
+.nav__toggle:focus-visible {
+    border-color: var(--border);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.nav__toggle span {
+    display: block;
+    width: 18px;
+    height: 1.5px;
+    background: var(--white);
+    transition: transform 0.35s cubic-bezier(.16, .8, .3, 1), opacity 0.25s ease, width 0.25s ease;
+}
+
+.nav__toggle span:nth-child(2) {
+    width: 12px;
+}
+
+/* open state: collapses to a single dash ("−"), not an "X" */
+.nav__toggle.is-open span:nth-child(1) {
+    opacity: 0;
+}
+
+.nav__toggle.is-open span:nth-child(2) {
+    width: 18px;
+}
+
+.nav__toggle.is-open span:nth-child(3) {
+    opacity: 0;
+}
+
+.nav__menu {
+    pointer-events: none;
+    width: min(600px, 100%);
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.35s cubic-bezier(.16, .8, .3, 1);
+    z-index: 49;
+}
+
+.nav__menu.is-open {
+    pointer-events: auto;
+    grid-template-rows: 1fr;
+}
+
+.nav__menu-panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+    max-height: calc(100vh - clamp(76px, 9vw, 96px) - 24px);
+    overflow-y: auto;
+    background: rgba(8, 13, 21, 0.9);
+
+    border-top: none;
+    border-radius: 0 0 20px 20px;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.65);
+}
+
+/* -------- link list -------- */
+.nav__menu-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav__menu-list li {
+    border-bottom: 1px solid var(--border);
+}
+
+.nav__menu-list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 24px;
+    color: var(--white);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(16px, 2vw, 19px);
+    transition: background 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
+}
+
+.nav__menu-list a:hover,
+.nav__menu-list a:focus-visible {
+    background: rgba(21, 94, 231, 0.1);
+    color: var(--blue);
+    padding-left: 30px;
+}
+
+/* -------- pitch-style outline link + action pair -------- */
+.nav__menu-outline {
+    margin: 12px 20px 0;
+    padding: 12px;
+    text-align: center;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    color: var(--muted);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.nav__menu-outline:hover,
+.nav__menu-outline:focus-visible {
+    border-color: var(--border-blue);
+    color: var(--white);
+}
+
+.nav__menu-actions {
+    display: flex;
+    gap: 10px;
+    padding: 10px 20px 14px;
+}
+
+.nav__menu-action {
+    flex: 1 1 0;
+    padding: 13px 14px;
+    text-align: center;
+    border-radius: 12px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--white);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: transform 0.2s cubic-bezier(.16, .8, .3, 1), background 0.2s ease, border-color 0.2s ease;
+}
+
+.nav__menu-action--solid {
+    background: var(--white);
+    color: var(--bg-void);
+    border-color: var(--white);
+}
+
+.nav__menu-action:hover,
+.nav__menu-action:focus-visible {
+    transform: translateY(-2px);
+    border-color: var(--border-blue);
+}
+
+.nav__menu-action--solid:hover,
+.nav__menu-action--solid:focus-visible {
+    background: var(--blue);
+    color: var(--white);
+    border-color: var(--blue);
+}
+
+/* =================================================================
+   HERO
+   ================================================================= */
+.hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background: var(--bg-void);
+}
+
+.hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    /* WebP is ~95% smaller (28KB vs 548KB) — image-set() picks it
+       when supported, falling back to the PNG on anything ancient */
+    background-image: url("../imagens/hero_banner_blue.png");
+    background-image: image-set(
+        url("../imagens/hero_banner_blue.webp") type("image/webp"),
+        url("../imagens/hero_banner_blue.png") type("image/png")
+    );
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    animation: hero-bg-drift 26s ease-in-out infinite alternate;
+}
+
+@keyframes hero-bg-drift {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.06);
+    }
+}
+
+.hero__grain {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.hero__inner {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: clamp(24px, 6vw, 96px);
+    max-width: 1440px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 64px) clamp(64px, 9vw, 120px);
+}
+
+.hero__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(32px, 5.4vw, 72px);
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+    margin: 0;
+    color: var(--white);
+}
+
+.hero__desc {
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 320px;
+    margin: 0 0 6px;
+    flex: none;
+}
+
+.hero__footer {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    max-width: 1440px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px clamp(20px, 5vw, 64px);
+    border-top: 1px solid var(--border);
+}
+
+.hero__location {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.hero__links {
+    display: flex;
+    align-items: center;
+    gap: clamp(20px, 4vw, 40px);
+}
+
+.hero__links a {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+    opacity: 0.85;
+    transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.hero__links a:hover,
+.hero__links a:focus-visible {
+    opacity: 1;
+    color: var(--blue);
+}
+
+/* =================================================================
+   RESPONSIVE
+   ================================================================= */
+@media (max-width: 860px) {
+    .hero__inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 22px;
+    }
+
+    .hero__desc {
+        max-width: 46ch;
+    }
+}
+
+@media (max-width: 520px) {
+    .nav__inner {
+        gap: 16px;
+        padding: 8px 8px 8px 16px;
+    }
+
+    .nav__menu-list a {
+        padding: 16px 18px;
+        font-size: 18px;
+    }
+
+    .nav__menu-actions {
+        flex-direction: column;
+    }
+
+    .hero__footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .hero__links {
+        gap: 18px;
+    }
+}
+
+/* =================================================================
+   Reduced motion
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+    .hero__title,
+    .hero__desc,
+    .hero__bg {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+/* ============ pain.css ============ */
+
+/* =================================================================
+   PAIN — light "problem statement" break before the dark solutions
+   section, zig-zagging left/right down the page.
+   ================================================================= */
+.pain {
+    position: relative;
+    background: #f4f4f4;
+    color: #0a0a0a;
+    padding: clamp(90px, 12vw, 160px) 0;
+    overflow: hidden;
+}
+
+.pain__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 64px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(90px, 14vw, 220px);
+}
+
+.pain__block {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 520px;
+    opacity: 0;
+    transform: translateY(36px);
+    transition: opacity 0.9s cubic-bezier(.16, .8, .3, 1), transform 0.9s cubic-bezier(.16, .8, .3, 1);
+}
+
+.pain__block.is-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.pain__block--right {
+    align-self: flex-end;
+    text-align: left;
+}
+
+.pain__block--left {
+    align-self: flex-start;
+}
+
+.pain__block--narrow {
+    max-width: 420px;
+}
+
+.pain__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(28px, 3.6vw, 46px);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin: 0;
+    color: #0a0a0a;
+}
+
+.pain__desc {
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.7;
+    color: #6b6b6b;
+    margin: 0;
+    max-width: 460px;
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    transition-delay: 0.15s;
+}
+
+.pain__block.is-in .pain__desc {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =================================================================
+   RESPONSIVE — stack full-width on narrower screens
+   ================================================================= */
+@media (max-width: 720px) {
+    .pain__block,
+    .pain__block--right,
+    .pain__block--left,
+    .pain__block--narrow {
+        align-self: stretch;
+        max-width: none;
+        text-align: left;
+    }
+
+    .pain__desc {
+        max-width: none;
+    }
+}
+
+/* =================================================================
+   Reduced motion
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+    .pain__block,
+    .pain__desc {
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+/* ============ home.css ============ */
+
+:root {
+    --bg-void: #03060B;
+    --surface: #080D15;
+    --surface-2: #0D1420;
+    --blue: #155EE7;
+    --blue-glow: rgba(21, 94, 231, 0.20);
+    --white: #F5F7FA;
+    --muted: #AAB2C0;
+    --border: rgba(255, 255, 255, 0.10);
+    --border-blue: rgba(21, 94, 231, 0.30);
+
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    --gap: clamp(32px, 3.8vw, 48px);
+    --row: clamp(38px, 4.2vw, 52px);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg-void);
+    color: var(--white);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* -------------------------------------------------------------
+   Scroll padding so the standalone preview has room to trigger
+   the scroll-driven line before/after the section.
+   ------------------------------------------------------------- */
+.scroll-spacer {
+    height: 70vh;
+}
+
+.scroll-spacer p {
+    position: sticky;
+    top: 44%;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.5;
+}
+
+/* =================================================================
+   SECTION SHELL
+   ================================================================= */
+.solutions {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: var(--bg-void);
+    padding: clamp(96px, 12vw, 160px) 0 clamp(140px, 14vw, 200px);
+}
+
+.solutions__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.solutions__grain {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.solutions__flow {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+}
+
+.solutions__flow .flow-halo {
+    fill: none;
+    stroke: var(--blue);
+    stroke-width: 16;
+    stroke-linecap: round;
+    opacity: 0.18;
+    filter: url(#flow-blur);
+}
+
+.solutions__flow .flow-core {
+    fill: none;
+    stroke: var(--blue);
+    stroke-width: 5.5;
+    stroke-linecap: round;
+    filter: url(#flow-glow);
+}
+
+.solutions__flow circle {
+    fill: var(--white);
+    filter: url(#flow-glow);
+    opacity: 0;
+}
+
+.solutions__inner {
+    position: relative;
+    z-index: 3;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 40px);
+}
+
+/* =================================================================
+   INTRO
+   ================================================================= */
+.solutions__intro {
+    max-width: 640px;
+    margin-bottom: clamp(80px, 10vw, 130px);
+}
+
+.eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin: 0 0 18px;
+    opacity: 0.85;
+}
+
+.solutions__intro h2 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(28px, 3.4vw, 42px);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin: 0;
+    color: var(--white);
+}
+
+/* =================================================================
+   BLOCKS
+   ================================================================= */
+.block {
+    position: relative;
+    margin-bottom: clamp(110px, 13vw, 170px);
+}
+
+.block:last-of-type {
+    margin-bottom: 0;
+}
+
+.block-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: clamp(36px, 4.5vw, 52px);
+    max-width: 620px;
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .7s ease, transform .7s ease;
+}
+
+.block-head.is-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.block-num {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--blue);
+    letter-spacing: 0.08em;
+    padding-top: 10px;
+    opacity: 0.8;
+}
+
+.block-head h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(32px, 4.4vw, 54px);
+    letter-spacing: -0.015em;
+    margin: 0 0 12px;
+    color: var(--white);
+}
+
+.block-desc {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+    max-width: 420px;
+}
+
+/* -------- visual grid: shared plumbing -------- */
+.visual-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: var(--row);
+    gap: var(--gap);
+}
+
+.visual {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 2px;
+    background:
+        radial-gradient(120% 140% at var(--glow-x, 100%) var(--glow-y, 0%), var(--blue-glow), transparent 60%),
+        var(--surface-2);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .8s cubic-bezier(.16, .8, .3, 1), transform .8s cubic-bezier(.16, .8, .3, 1);
+    transition-delay: calc(var(--i, 0) * 90ms);
+    will-change: transform;
+}
+
+.visual.is-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.visual-wrap {
+    position: relative;
+}
+
+/* corner ticks — precision-frame detail */
+.visual::before,
+.visual::after {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-color: var(--border-blue);
+    border-style: solid;
+    border-width: 0;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.visual::before {
+    top: 10px;
+    left: 10px;
+    border-top-width: 1px;
+    border-left-width: 1px;
+}
+
+.visual::after {
+    bottom: 10px;
+    right: 10px;
+    border-bottom-width: 1px;
+    border-right-width: 1px;
+}
+
+.visual__tag {
+    position: absolute;
+    left: 18px;
+    bottom: 16px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    z-index: 3;
+    opacity: 0.7;
+}
+
+
+.visual__art-stack {
+    position: absolute;
+    inset: 0;
+}
+
+.art-frame {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .5s ease;
+}
+
+.art-frame.is-active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.art-frame svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.visual-dots {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%);
+    margin-top: 14px;
+    display: flex;
+    gap: 20px;
+    z-index: 2;
+}
+
+.dot {
+    position: relative;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    border: none;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.22);
+    cursor: pointer;
+    transition: background .3s ease, transform .3s ease;
+}
+
+/* invisible tap-target expansion — visual dot stays 6px, hit area
+   grows to ~24px (WCAG 2.2 SC 2.5.8 minimum) without touching its
+   neighbors at the 20px gap above */
+.dot::before {
+    content: "";
+    position: absolute;
+    inset: -9px;
+}
+
+.dot:hover {
+    background: rgba(255, 255, 255, 0.45);
+}
+
+.dot.is-active {
+    background: var(--blue);
+    transform: scale(1.35);
+}
+
+.dot:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 3px;
+}
+
+/* mouse tilt target */
+.visual__inner {
+    position: absolute;
+    inset: 0;
+    transform: translate3d(0, 0, 0);
+    transition: transform .5s cubic-bezier(.16, .8, .3, 1);
+}
+
+/* =================================================================
+   SOFTWARE layout
+   ================================================================= */
+.sw-lg {
+    grid-column: 7/13;
+    grid-row: 1/12;
+}
+
+.sw-md {
+    grid-column: 1/6;
+    grid-row: 4/12;
+}
+
+.sw-wide {
+    grid-column: 4/11;
+    grid-row: 13/17;
+}
+
+/* =================================================================
+   MARKETING layout
+   ================================================================= */
+.mk-top {
+    grid-column: 1/8;
+    grid-row: 1/8;
+}
+
+.mk-a {
+    grid-column: 1/5;
+    grid-row: 9/16;
+}
+
+.mk-b {
+    grid-column: 5/9;
+    grid-row: 9/16;
+}
+
+.mk-c {
+    grid-column: 9/13;
+    grid-row: 9/16;
+}
+
+/* =================================================================
+   AUTOMAÇÃO layout
+   ================================================================= */
+.au-wide {
+    grid-column: 1/10;
+    grid-row: 1/8;
+}
+
+.au-tall {
+    grid-column: 8/13;
+    grid-row: 9/20;
+}
+
+.au-sq {
+    grid-column: 1/6;
+    grid-row: 15/21;
+}
+
+/* =================================================================
+   RESPONSIVE — keep asymmetry, don't collapse into a flat card list
+   ================================================================= */
+@media (max-width:860px) {
+    :root {
+        --row: 34px;
+    }
+
+    .visual-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    .sw-lg {
+        grid-column: 2/7;
+        grid-row: 1/10;
+    }
+
+    .sw-md {
+        grid-column: 1/5;
+        grid-row: 8/14;
+    }
+
+    .sw-wide {
+        grid-column: 2/7;
+        grid-row: 15/18;
+    }
+
+    .mk-top {
+        grid-column: 1/7;
+        grid-row: 1/7;
+    }
+
+    .mk-a {
+        grid-column: 1/4;
+        grid-row: 8/13;
+    }
+
+    .mk-b {
+        grid-column: 3/6;
+        grid-row: 13/18;
+    }
+
+    .mk-c {
+        grid-column: 1/4;
+        grid-row: 18/23;
+    }
+
+    .au-wide {
+        grid-column: 1/7;
+        grid-row: 1/7;
+    }
+
+    .au-tall {
+        grid-column: 3/7;
+        grid-row: 7/16;
+    }
+
+    .au-sq {
+        grid-column: 1/5;
+        grid-row: 16/21;
+    }
+}
+
+@media (max-width:520px) {
+    .block-head {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .block-num {
+        padding-top: 0;
+    }
+}
+
+/* =================================================================
+   Reduced motion
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .visual,
+    .block-head {
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .visual__inner {
+        transition: none !important;
+        transform: none !important;
+    }
+
+    .art-frame {
+        transition: none !important;
+    }
+}
+/* ============ offer.css ============ */
+
+/* =================================================================
+   OFFER — "O que fazemos para você". Minimalist editorial section:
+   white bg, black type, three huge disclosure rows that expand into
+   a horizontal marquee of services. Deliberately card-free.
+   ================================================================= */
+.offer {
+    position: relative;
+    background: #ffffff;
+    color: #0a0a0a;
+    padding: clamp(90px, 12vw, 160px) 0;
+}
+
+.offer__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 64px);
+}
+
+.offer__kicker {
+    margin: 0 0 clamp(48px, 7vw, 88px);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #6b6b6b;
+}
+
+.offer__list {
+    border-top: 1px solid rgba(10, 10, 10, 0.1);
+}
+
+.offer__row {
+    width: 100%;
+    border-bottom: 1px solid rgba(10, 10, 10, 0.1);
+    background: #ffffff;
+    transition: background 0.4s cubic-bezier(.16, .8, .3, 1), border-color 0.4s ease;
+}
+
+.offer__row-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 64px);
+}
+
+.offer__row.is-active {
+    background: #0a0a0a;
+    border-bottom-color: transparent;
+}
+
+.offer__trigger {
+    display: flex;
+    align-items: center;
+    gap: clamp(16px, 3vw, 32px);
+    width: 100%;
+    padding: clamp(22px, 4vw, 40px) 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.offer__trigger-num {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--blue);
+    opacity: 0.85;
+}
+
+.offer__trigger-text {
+    flex: 1 1 auto;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(40px, 7.4vw, 104px);
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    color: #0a0a0a;
+    transition: color 0.4s cubic-bezier(.16, .8, .3, 1);
+}
+
+.offer__row.is-active .offer__trigger-text {
+    color: #ffffff;
+}
+
+.offer__trigger-icon {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(36px, 4vw, 52px);
+    height: clamp(36px, 4vw, 52px);
+    border-radius: 50%;
+    border: 1px solid rgba(10, 10, 10, 0.18);
+    color: #0a0a0a;
+    transition: transform 0.4s cubic-bezier(.16, .8, .3, 1), border-color 0.4s ease, color 0.4s ease, background 0.4s ease;
+}
+
+.offer__trigger-icon svg {
+    width: 44%;
+    height: 44%;
+}
+
+.offer__row.is-active .offer__trigger-icon {
+    transform: rotate(90deg);
+    border-color: rgba(255, 255, 255, 0.35);
+    color: #ffffff;
+}
+
+/* -------- disclosure panel: height animated via grid-rows, no JS
+   measuring, no layout-jank -------- */
+.offer__panel-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.45s cubic-bezier(.16, .8, .3, 1);
+}
+
+.offer__row.is-active .offer__panel-wrap {
+    grid-template-rows: 1fr;
+}
+
+.offer__panel {
+    overflow: hidden;
+    min-height: 0;
+}
+
+.offer__track {
+    overflow: hidden;
+    padding-bottom: clamp(28px, 4vw, 48px);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+}
+
+.offer__marquee {
+    display: flex;
+    width: max-content;
+    animation: offer-marquee var(--marquee-duration, 32s) linear infinite;
+    animation-play-state: paused;
+}
+
+.offer__row.is-active .offer__marquee {
+    animation-play-state: running;
+}
+
+.offer__track:hover .offer__marquee {
+    animation-play-state: paused;
+}
+
+@keyframes offer-marquee {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+.offer__items {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.offer__item {
+    flex: 0 0 auto;
+    width: clamp(230px, 24vw, 300px);
+    padding-right: clamp(28px, 3vw, 40px);
+    margin-right: clamp(28px, 3vw, 40px);
+    border-right: 1px solid rgba(255, 255, 255, 0.14);
+    opacity: 0;
+    transform: translateX(14px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    transition-delay: calc(var(--i, 0) * 55ms);
+}
+
+.offer__row.is-active .offer__item {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.offer__item h3 {
+    margin: 0 0 8px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 1.25;
+    color: #ffffff;
+}
+
+.offer__item p {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* =================================================================
+   RESPONSIVE
+   ================================================================= */
+@media (max-width: 640px) {
+    .offer__trigger {
+        gap: 12px;
+    }
+
+    .offer__trigger-num {
+        display: none;
+    }
+
+    .offer__item {
+        width: 74vw;
+    }
+}
+
+/* =================================================================
+   Reduced motion — keep the disclosure interaction, drop the
+   marquee animation in favor of manual horizontal scroll so every
+   item stays reachable.
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+    .offer__row,
+    .offer__trigger-text,
+    .offer__trigger-icon,
+    .offer__panel-wrap,
+    .offer__item {
+        transition: none !important;
+    }
+
+    .offer__row.is-active .offer__trigger-icon {
+        transform: none;
+    }
+
+    .offer__item {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .offer__track {
+        overflow-x: auto;
+    }
+
+    .offer__marquee {
+        animation: none !important;
+    }
+}
+
+/* ============ process.css ============ */
+
+/* =================================================================
+   PROCESS — sequential stacking cards. All 4 .process__card panels
+   occupy the exact same rectangle inside .process__track (absolute,
+   inset:0). js/process.js pins the track (GSAP ScrollTrigger,
+   pin:true) and scrubs each card's translateY from "below the
+   viewport" (yPercent:100) up to its resting spot (yPercent:0), one
+   after another — the moving panel is the effect, driven 1:1 by
+   scroll progress. z-index (via --index) plus the incoming card
+   being fully opaque is what makes it physically cover the one
+   before it; no opacity/fade/blur is ever used for that.
+   ================================================================= */
+:root {
+    --process-top: clamp(96px, 12vw, 140px);
+    /* keep in sync with STAGGER in js/process.js (52px × 3 steps) */
+    --process-stagger-total: 156px;
+}
+
+.process {
+    position: relative;
+    background: var(--bg-void);
+    padding: clamp(90px, 12vw, 160px) 0;
+}
+
+.process__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 64px);
+}
+
+.process__head {
+    max-width: 640px;
+    margin: 0 0 clamp(56px, 8vw, 96px);
+}
+
+.process__kicker {
+    margin: 0 0 16px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--blue);
+    opacity: 0.85;
+}
+
+.process__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(28px, 3.6vw, 46px);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin: 0;
+    color: var(--white);
+}
+
+/* =================================================================
+   TRACK — desktop/tablet: the pinned stage. Only as tall as ONE
+   card; js/process.js's ScrollTrigger (pin:true) reserves the extra
+   scroll room automatically (its "pin-spacer"), proportional to the
+   number of cards — no manual height math needed here.
+   ================================================================= */
+.process__track {
+    position: relative;
+    height: clamp(460px, 80vh, 780px);
+    /* reserves room for the fanned peek: later cards sit
+       --process-stagger-total lower than the track's own box */
+    margin-bottom: var(--process-stagger-total);
+}
+
+.process__card {
+    position: absolute;
+    inset: 0;
+    z-index: calc(var(--index, 0) + 1);
+    padding: clamp(32px, 4vw, 56px) clamp(20px, 3vw, 40px);
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: start;
+    column-gap: clamp(24px, 4.5vw, 72px);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-void);
+    transform-origin: 50% 100%;
+    will-change: transform;
+    overflow: hidden;
+}
+
+.process__num {
+    grid-column: 1;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(32px, 3.6vw, 56px);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--white);
+}
+
+.process__main {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(28px, 4vw, 52px);
+    min-width: 0;
+}
+
+.process__title-row {
+    display: flex;
+    align-items: center;
+    gap: clamp(16px, 2.4vw, 32px);
+}
+
+.process__card-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(32px, 4.2vw, 64px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--white);
+    overflow-wrap: break-word;
+    max-width: 100%;
+}
+
+.process__scatter {
+    width: clamp(90px, 11vw, 150px);
+    height: auto;
+    flex: none;
+    fill: var(--blue);
+    opacity: 0.75;
+}
+
+.process__tag {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin: 0;
+    opacity: 0.9;
+}
+
+.process__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.process__list li {
+    font-family: var(--font-body);
+    font-size: clamp(17px, 1.6vw, 21px);
+    line-height: 1.3;
+    color: var(--white);
+    opacity: 0.92;
+}
+
+.process__card-desc {
+    grid-column: 3;
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--muted);
+    margin: 0;
+    max-width: 30ch;
+    justify-self: end;
+}
+
+/* =================================================================
+   NARROW SCREENS — same pinned scroll-stacking effect as desktop
+   (js/process.js runs it at every width). Only the card's INTERNAL
+   layout changes: the 3-column grid (number | title+tag+list |
+   description) is far too tight under ~720px, so it collapses to a
+   single stacked column there. The positioning mechanic itself
+   (position:absolute, inset:0) stays untouched.
+   ================================================================= */
+@media (max-width: 720px) {
+    .process__track {
+        /* single-column content is taller — give it more room */
+        height: clamp(560px, 94vh, 780px);
+    }
+
+    .process__card {
+        grid-template-columns: 1fr;
+        row-gap: 20px;
+        padding: 28px 20px;
+        overflow-y: auto;
+    }
+
+    .process__num,
+    .process__main,
+    .process__card-desc {
+        grid-column: 1;
+    }
+
+    .process__num {
+        font-size: 32px;
+    }
+
+    .process__card-title {
+        font-size: clamp(30px, 9vw, 44px);
+    }
+
+    .process__card-desc {
+        justify-self: auto;
+        max-width: none;
+    }
+}
+
+/* =================================================================
+   Reduced motion — keep the cards readable in normal flow; the
+   scroll-driven stacking never runs (js/process.js checks this same
+   query before touching GSAP).
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+    .process__track {
+        height: auto;
+        margin-bottom: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .process__card {
+        position: static;
+        inset: auto;
+        transform: none !important;
+    }
+}
+
+/* ============ results.css ============ */
+
+/* =================================================================
+   RESULTS — "Resultados que falam por si". Horizontal rail of case
+   cards. Mobile-first: static 2-col grid with everything visible.
+   On pointer-precise + hover-capable + wide viewports, upgrades to
+   a single flex row where the hovered/focused card expands and its
+   siblings cede space (pure CSS, :has() — no JS needed).
+   ================================================================= */
+.results {
+    position: relative;
+    background: var(--bg-void);
+    padding: clamp(90px, 12vw, 160px) 0;
+}
+
+.results__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 64px);
+}
+
+.results__head {
+    max-width: 640px;
+    margin: 0 0 clamp(48px, 7vw, 80px);
+}
+
+.results__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(30px, 4vw, 52px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    margin: 0 0 14px;
+    color: var(--white);
+}
+
+.results__subtitle {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+}
+
+/* -------- mobile-first: static grid, everything visible -------- */
+.results__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.results__card {
+    container-type: inline-size;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 260px;
+    padding: clamp(18px, 2.2vw, 28px);
+    background:
+        radial-gradient(120% 140% at 100% 0%, var(--blue-glow), transparent 60%),
+        var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    text-decoration: none;
+    color: var(--white);
+    overflow: hidden;
+}
+
+.results__compact {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.results__cat {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.results__spark {
+    width: 100%;
+    max-width: 120px;
+    height: auto;
+    opacity: 0.8;
+}
+
+.results__metric-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.results__metric {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--white);
+    transition: font-size 0.45s cubic-bezier(.16, .8, .3, 1);
+}
+
+.results__metric-label {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.results__expand {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.results__desc {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--muted);
+}
+
+.results__stats {
+    list-style: none;
+    margin: 0;
+    padding: 12px 0 0;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.results__stats li {
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    color: var(--muted);
+}
+
+.results__stats li span {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    color: var(--white);
+    margin-right: 4px;
+}
+
+.results__cta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue);
+}
+
+/* =================================================================
+   ENHANCED DESKTOP/TABLET — real hover + enough room: single row,
+   hovered/focused card expands, siblings shrink. Height stays fixed
+   the whole time (only widths change) so nothing else on the page
+   ever shifts.
+   ================================================================= */
+@media (hover: hover) and (pointer: fine) and (min-width: 900px) {
+    .results__row {
+        display: flex;
+        align-items: stretch;
+        gap: 6px;
+        height: clamp(380px, 36vw, 480px);
+    }
+
+    .results__card {
+        flex: 1 1 0%;
+        min-width: 0;
+        min-height: 0;
+        height: 100%;
+        transition: flex-grow 0.45s cubic-bezier(.16, .8, .3, 1);
+    }
+
+    .results__card:hover,
+    .results__card:focus-visible {
+        flex-grow: 4;
+        outline: none;
+    }
+
+    .results__row:has(.results__card:hover) .results__card:not(:hover),
+    .results__row:has(.results__card:focus-visible) .results__card:not(:focus-visible) {
+        flex-grow: 0.65;
+    }
+
+    .results__spark {
+        max-width: 160px;
+    }
+
+    /* container query: the metric grows with the card's own width,
+       not the viewport, so it scales correctly whether the card is
+       collapsed (~110px) or expanded (~600px+) */
+    @container (min-width: 260px) {
+        .results__metric {
+            font-size: 56px;
+        }
+    }
+
+    @container (min-width: 460px) {
+        .results__metric {
+            font-size: 84px;
+        }
+    }
+
+    .results__expand {
+        opacity: 0;
+        transform: translateY(12px);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        transition-delay: 0s;
+    }
+
+    .results__card:hover .results__expand,
+    .results__card:focus-visible .results__expand {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.1s;
+    }
+
+    .results__stats li {
+        opacity: 0;
+        transform: translateX(10px);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        transition-delay: calc(0.12s + var(--i, 0) * 60ms);
+    }
+
+    .results__card:hover .results__stats li,
+    .results__card:focus-visible .results__stats li {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* =================================================================
+   Reduced motion — keep the interaction, drop the animated
+   interpolation so state changes are instant instead of smooth.
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+    .results__card,
+    .results__metric,
+    .results__expand,
+    .results__stats li {
+        transition: none !important;
+    }
+}
+
+/* ============ testimonials.css ============ */
+
+/* =================================================================
+   TESTIMONIALS — scroll-driven horizontal track (desktop). The
+   section pins in the viewport (GSAP ScrollTrigger, pin:true) and
+   the vertical scroll the user keeps doing is scrubbed 1:1 into
+   .testimonials__track's translateX, right → left, until the last
+   card is fully visible — then the section unpins and the page
+   continues normally. See js/testimonials.js.
+
+   Mobile-first: base styles are a plain, safe vertical column
+   (no pin, no horizontal scroll-jack) — the enhancement only kicks
+   in at the same 861px breakpoint used elsewhere in the site, and
+   only when the browser actually supports it.
+   ================================================================= */
+:root {
+    /* clearance so the pin engages below the floating nav pill,
+       instead of slamming the heading flush against the top edge */
+    --testimonials-top: clamp(90px, 11vw, 132px);
+}
+
+.testimonials {
+    position: relative;
+    background: var(--bg-void);
+    padding: clamp(90px, 12vw, 160px) 0;
+}
+
+.testimonials__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 64px);
+}
+
+.testimonials__head {
+    max-width: 640px;
+    margin: 0 0 clamp(56px, 8vw, 96px);
+}
+
+.testimonials__kicker {
+    margin: 0 0 16px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--blue);
+    opacity: 0.85;
+}
+
+.testimonials__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(28px, 3.6vw, 46px);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin: 0;
+    color: var(--white);
+}
+
+/* -------- mobile-first: plain vertical column -------- */
+.testimonials__viewport {
+    overflow: visible;
+}
+
+.testimonials__track {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.testimonials__card {
+    width: auto;
+    flex: none;
+    padding: 28px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background:
+        radial-gradient(120% 140% at 100% 0%, var(--blue-glow), transparent 60%),
+        var(--surface-2);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.testimonials__mark {
+    font-family: var(--font-display);
+    font-size: 44px;
+    line-height: 0.6;
+    color: var(--blue);
+    opacity: 0.85;
+}
+
+.testimonials__text {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--white);
+}
+
+.testimonials__author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+}
+
+.testimonials__avatar {
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--blue);
+    background: var(--blue-glow);
+    border: 1px solid var(--border-blue);
+}
+
+.testimonials__author-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.testimonials__name {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--white);
+}
+
+.testimonials__role {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+}
+
+/* =================================================================
+   DESKTOP — the pinned horizontal track. js/testimonials.js only
+   creates the ScrollTrigger at this same breakpoint.
+   ================================================================= */
+@media (min-width: 861px) {
+    /* tighter than the mobile-first defaults — while pinned, the
+       heading + card row need to fit inside one viewport height
+       without either getting clipped at the bottom */
+    .testimonials {
+        padding: clamp(48px, 6vw, 84px) 0;
+    }
+
+    .testimonials__head {
+        margin-bottom: clamp(28px, 3.4vw, 44px);
+    }
+
+    .testimonials__viewport {
+        overflow: hidden;
+    }
+
+    .testimonials__track {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: clamp(24px, 2.6vw, 40px);
+        will-change: transform;
+    }
+
+    .testimonials__card {
+        width: clamp(380px, 32vw, 480px);
+        flex: 0 0 clamp(380px, 32vw, 480px);
+        padding: clamp(28px, 2.6vw, 40px);
+        min-height: 260px;
+    }
+
+    .testimonials__mark {
+        font-size: 48px;
+    }
+
+    .testimonials__text {
+        font-size: 17px;
+    }
+}
+
+/* =================================================================
+   Reduced motion — always the plain column, never the scroll-jack,
+   regardless of viewport width. js/testimonials.js checks this same
+   query before touching GSAP.
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+    .testimonials__viewport {
+        overflow: visible !important;
+    }
+
+    .testimonials__track {
+        display: flex !important;
+        flex-direction: column !important;
+        transform: none !important;
+    }
+
+    .testimonials__card {
+        width: auto !important;
+        flex: none !important;
+    }
+}
+
+/* ============ faq.css ============ */
+
+/* =================================================================
+   FAQ — simple accordion, hairline-ruled (same editorial language
+   as .process / .results). Height animates via grid-template-rows
+   0fr → 1fr (no JS measuring, no layout jank) — same technique
+   already used in .offer's disclosure rows.
+   ================================================================= */
+.faq {
+    position: relative;
+    background: var(--bg-void);
+    padding: clamp(90px, 12vw, 160px) 0;
+}
+
+.faq__inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 64px);
+}
+
+.faq__head {
+    max-width: 560px;
+    margin: 0 0 clamp(48px, 7vw, 80px);
+}
+
+.faq__kicker {
+    margin: 0 0 16px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--blue);
+    opacity: 0.85;
+}
+
+.faq__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(28px, 3.6vw, 44px);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin: 0;
+    color: var(--white);
+}
+
+.faq__list {
+    border-top: 1px solid var(--border);
+}
+
+.faq__item {
+    border-bottom: 1px solid var(--border);
+}
+
+.faq__question {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: clamp(22px, 3vw, 30px) 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(17px, 1.9vw, 21px);
+    line-height: 1.35;
+    color: var(--white);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.faq__icon {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    color: var(--white);
+    transition: transform 0.35s cubic-bezier(.16, .8, .3, 1), border-color 0.35s ease;
+}
+
+.faq__icon svg {
+    width: 40%;
+    height: 40%;
+}
+
+.faq__item.is-open .faq__icon {
+    transform: rotate(45deg);
+    border-color: var(--border-blue);
+    color: var(--blue);
+}
+
+.faq__answer-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s cubic-bezier(.16, .8, .3, 1);
+}
+
+.faq__item.is-open .faq__answer-wrap {
+    grid-template-rows: 1fr;
+}
+
+.faq__answer {
+    overflow: hidden;
+    min-height: 0;
+}
+
+.faq__answer p {
+    margin: 0;
+    padding: 0 0 clamp(22px, 3vw, 30px);
+    max-width: 62ch;
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--muted);
+}
+
+/* =================================================================
+   Reduced motion
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+    .faq__icon,
+    .faq__answer-wrap {
+        transition: none !important;
+    }
+}
+
+/* ============ cta.css ============ */
+
+/* =================================================================
+   CTA — final, high-contrast conversion push before the footer.
+   Flat white (not blue) so it doesn't clash with the footer's blue
+   gradient right below — the sequence reads dark (FAQ) → white (CTA)
+   → blue (footer) instead of repeating the same color twice in a row.
+   ================================================================= */
+.cta {
+    position: relative;
+    background: #ffffff;
+    padding: clamp(90px, 13vw, 170px) 0;
+    overflow: hidden;
+}
+
+.cta__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 64px);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* -------- entrance, on scroll (js/cta.js) -------- */
+.cta [data-reveal] {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity 0.75s cubic-bezier(.16, .8, .3, 1), transform 0.75s cubic-bezier(.16, .8, .3, 1);
+    transition-delay: calc(var(--i, 0) * 100ms);
+}
+
+.cta [data-reveal].is-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.cta__kicker {
+    margin: 0 0 20px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--blue);
+}
+
+.cta__title {
+    margin: 0 0 20px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(32px, 5vw, 64px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: #0a0a0a;
+}
+
+.cta__subtitle {
+    margin: 0 0 40px;
+    max-width: 46ch;
+    font-family: var(--font-body);
+    font-size: clamp(16px, 1.6vw, 19px);
+    line-height: 1.6;
+    color: #6b6b6b;
+}
+
+.cta__button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 36px;
+    border-radius: 999px;
+    background: var(--blue);
+    color: var(--white);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(16px, 1.7vw, 19px);
+    text-decoration: none;
+    box-shadow: 0 20px 50px -18px rgba(21, 94, 231, 0.5);
+    transition: transform 0.25s cubic-bezier(.16, .8, .3, 1), box-shadow 0.25s ease;
+}
+
+.cta__button::before {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: inherit;
+    border: 1.5px solid rgba(21, 94, 231, 0.45);
+    opacity: 0;
+    animation: cta-pulse 2.4s ease-out infinite;
+}
+
+.cta__button-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    flex: none;
+}
+
+.cta__button-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.cta__button:hover,
+.cta__button:focus-visible {
+    transform: translateY(-3px);
+    box-shadow: 0 26px 60px -16px rgba(21, 94, 231, 0.6);
+}
+
+.cta__note {
+    margin: 24px 0 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: #8a8a8a;
+}
+
+@keyframes cta-pulse {
+    0% {
+        opacity: 0.55;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.18);
+    }
+}
+
+/* =================================================================
+   Reduced motion
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+    .cta__button::before {
+        animation: none;
+        display: none;
+    }
+
+    .cta__button {
+        transition: none;
+    }
+
+    .cta [data-reveal] {
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+/* ============ footer.css ============ */
+
+/* =================================================================
+   SITE FOOTER — vivid blue/lavender gradient close-out section
+   ================================================================= */
+.site-footer {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background:
+        radial-gradient(55% 75% at 28% 38%, rgba(255, 255, 255, 0.22), transparent 62%),
+        linear-gradient(135deg, #b7c0ef 0%, #8b9bea 22%, #5f74e3 48%, #3c53d6 72%, #2a3fc4 100%);
+    color: var(--white);
+    padding: clamp(64px, 8vw, 110px) 0 clamp(28px, 4vw, 40px);
+}
+
+.site-footer__grain {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.site-footer__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 64px);
+}
+
+/* -------- top: SALVE! + social list -------- */
+.site-footer__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: clamp(24px, 6vw, 64px);
+    flex-wrap: wrap;
+}
+
+.site-footer__salve {
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    font-size: clamp(80px, 16vw, 220px);
+    line-height: 0.9;
+    margin: 0;
+    letter-spacing: -0.01em;
+    background: linear-gradient(90deg, #ffffff 0%, #ffffff 45%, rgba(255, 255, 255, 0.45) 78%, rgba(255, 255, 255, 0.16) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.site-footer__bang {
+    font-style: normal;
+}
+
+.site-footer__social {
+    list-style: none;
+    margin: clamp(14px, 2vw, 28px) 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(18px, 2.4vw, 28px);
+    flex: none;
+}
+
+.site-footer__social-item a {
+    display: grid;
+    grid-template-columns: 28px 1px auto;
+    align-items: center;
+    gap: 18px;
+    text-decoration: none;
+    color: #0c1230;
+}
+
+.site-footer__social-item svg {
+    width: 28px;
+    height: 28px;
+    color: #0c1230;
+}
+
+.site-footer__social-divider {
+    width: 1px;
+    height: 28px;
+    background: rgba(12, 18, 48, 0.35);
+}
+
+.site-footer__social-item span:last-child {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: clamp(16px, 1.6vw, 19px);
+    letter-spacing: 0.01em;
+}
+
+/* -------- CTA lines -------- */
+.site-footer__cta {
+    margin-top: clamp(48px, 7vw, 84px);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.site-footer__cta-line1,
+.site-footer__cta-line2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(18px, 2.2vw, 26px);
+    line-height: 1.3;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.8s cubic-bezier(.16, .8, .3, 1), transform 0.8s cubic-bezier(.16, .8, .3, 1);
+}
+
+.site-footer__cta-line1 {
+    font-weight: bolder;
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.site-footer__cta-line2 {
+    font-weight: 700;
+    color: #0a1030;
+    transition-delay: 0.12s;
+}
+
+.site-footer__cta-line1.is-in,
+.site-footer__cta-line2.is-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* -------- email row -------- */
+.site-footer__email-row {
+    margin-top: clamp(56px, 8vw, 96px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(16px, 4vw, 40px);
+}
+
+.site-footer__rule {
+    flex: 1 1 auto;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.site-footer__email {
+    flex: none;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(16px, 2vw, 20px);
+    letter-spacing: 0.01em;
+    color: var(--white);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.site-footer__email:hover,
+.site-footer__email:focus-visible {
+    text-decoration: underline;
+}
+
+/* -------- bottom row -------- */
+.site-footer__bottom {
+    margin-top: clamp(28px, 4vw, 48px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.site-footer__nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(20px, 4vw, 44px);
+}
+
+.site-footer__nav a {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--white);
+    text-decoration: none;
+    opacity: 0.92;
+    transition: opacity 0.2s ease;
+}
+
+.site-footer__nav a:hover,
+.site-footer__nav a:focus-visible {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.site-footer__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 26px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.site-footer__btn:hover,
+.site-footer__btn:focus-visible {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.85);
+    transform: translateY(-1px);
+}
+
+/* =================================================================
+   RESPONSIVE
+   ================================================================= */
+@media (max-width: 720px) {
+    .site-footer__top {
+        flex-direction: column;
+    }
+
+    .site-footer__email-row {
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .site-footer__rule {
+        width: 100%;
+    }
+
+    .site-footer__bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+}
+
+/* =================================================================
+   Reduced motion
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+    .site-footer__cta-line1,
+    .site-footer__cta-line2 {
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}

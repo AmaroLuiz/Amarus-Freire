@@ -4,9 +4,6 @@
     var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var section = document.getElementById("processo");
     if (!section || reduceMotion) return;
-    if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
-
-    gsap.registerPlugin(ScrollTrigger);
 
     var track = section.querySelector("[data-process-track]");
     var cards = Array.prototype.slice.call(section.querySelectorAll("[data-process-card]"));
@@ -25,57 +22,77 @@
         return Math.max(window.innerHeight * 0.9, 520);
     }
 
-    var mm = gsap.matchMedia();
+    var STAGGER = 52; // px peek per covered card — see --process-stagger in process.css
 
-    // px offset added per card index — once a card is covered, its
-    // header (number + title) still peeks out just above the card in
-    // front of it, like a fanned stack of paper, instead of vanishing
-    // outright. See --process-stagger in process.css, which reserves
-    // the matching space below the track.
-    var STAGGER = 52;
+    function build() {
+        if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
 
-    // All 4 cards occupy (almost) the same rectangle (.process__card
-    // is absolute; inset:0 inside .process__track — see process.css),
-    // offset only by that small per-index STAGGER. ScrollTrigger pins
-    // the track in the viewport and scrubs each card's translateY
-    // from fully below (yPercent:100) up to its resting spot
-    // (yPercent:0), one after another. That vertical movement — not
-    // opacity, not scale — is what physically drives the next panel
-    // up and over the previous one; scale is only a barely-there
-    // depth cue on the panel being covered.
-    //
-    // Runs at every width (mobile included) — "all" still goes
-    // through gsap.matchMedia so it's cleanly rebuilt on resize/
-    // orientation change, it just isn't gated to a min-width.
-    mm.add("all", function () {
-        cards.forEach(function (card, i) {
-            gsap.set(card, { yPercent: i === 0 ? 0 : 100, y: i * STAGGER, scale: 1 });
+        gsap.registerPlugin(ScrollTrigger);
+        var mm = gsap.matchMedia();
+
+        // All 4 cards occupy (almost) the same rectangle (.process__card
+        // is absolute; inset:0 inside .process__track — see process.css),
+        // offset only by that small per-index STAGGER. ScrollTrigger pins
+        // the track in the viewport and scrubs each card's translateY
+        // from fully below (yPercent:100) up to its resting spot
+        // (yPercent:0), one after another. That vertical movement — not
+        // opacity, not scale — is what physically drives the next panel
+        // up and over the previous one; scale is only a barely-there
+        // depth cue on the panel being covered.
+        //
+        // Runs at every width (mobile included) — "all" still goes
+        // through gsap.matchMedia so it's cleanly rebuilt on resize/
+        // orientation change, it just isn't gated to a min-width.
+        mm.add("all", function () {
+            cards.forEach(function (card, i) {
+                gsap.set(card, { yPercent: i === 0 ? 0 : 100, y: i * STAGGER, scale: 1 });
+            });
+
+            var tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: track,
+                    start: function () { return "top top+=" + stickyOffset(); },
+                    end: function () { return "+=" + (cards.length - 1) * stepDistance(); },
+                    scrub: 1,
+                    pin: true,
+                    anticipatePin: 1,
+                    invalidateOnRefresh: true,
+                },
+            });
+
+            for (var i = 1; i < cards.length; i++) {
+                tl.to(cards[i], { yPercent: 0, ease: "none" }, i - 1);
+                tl.to(cards[i - 1], { scale: 0.97, ease: "none" }, i - 1);
+            }
+
+            // gsap.matchMedia() auto-reverts this timeline/ScrollTrigger
+            // (and the inline styles gsap.set() wrote) once the query
+            // stops matching — no manual cleanup needed.
         });
 
-        var tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: track,
-                start: function () { return "top top+=" + stickyOffset(); },
-                end: function () { return "+=" + (cards.length - 1) * stepDistance(); },
-                scrub: 1,
-                pin: true,
-                anticipatePin: 1,
-                invalidateOnRefresh: true,
-            },
-        });
-
-        for (var i = 1; i < cards.length; i++) {
-            tl.to(cards[i], { yPercent: 0, ease: "none" }, i - 1);
-            tl.to(cards[i - 1], { scale: 0.97, ease: "none" }, i - 1);
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
         }
+    }
 
-        // gsap.matchMedia() auto-reverts this timeline/ScrollTrigger
-        // (and the inline styles gsap.set() wrote) once the query
-        // stops matching — no manual cleanup needed.
-    });
+    // Setting up GSAP/ScrollTrigger here (pin measurement, matchMedia,
+    // getBoundingClientRect calls) is real main-thread work. The
+    // section is below the fold, so there's no visible cost to
+    // pushing that work off the critical rendering path and into an
+    // idle moment instead — it keeps Total Blocking Time down without
+    // the effect being any less ready by the time someone scrolls
+    // this far.
+    function whenIdle(fn) {
+        if ("requestIdleCallback" in window) {
+            requestIdleCallback(fn, { timeout: 2000 });
+        } else {
+            setTimeout(fn, 200);
+        }
+    }
 
-    window.addEventListener("load", function () { ScrollTrigger.refresh(); });
-    if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
+    if (document.readyState === "complete") {
+        whenIdle(build);
+    } else {
+        window.addEventListener("load", function () { whenIdle(build); });
     }
 })();
