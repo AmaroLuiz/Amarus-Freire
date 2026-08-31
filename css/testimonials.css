@@ -1,0 +1,206 @@
+@charset "UTF-8";
+
+/* =================================================================
+   TESTIMONIALS — scroll-driven horizontal track (desktop). The
+   section pins in the viewport (GSAP ScrollTrigger, pin:true) and
+   the vertical scroll the user keeps doing is scrubbed 1:1 into
+   .testimonials__track's translateX, right → left, until the last
+   card is fully visible — then the section unpins and the page
+   continues normally. See js/testimonials.js.
+
+   Mobile-first: base styles are a plain, safe vertical column
+   (no pin, no horizontal scroll-jack) — the enhancement only kicks
+   in at the same 861px breakpoint used elsewhere in the site, and
+   only when the browser actually supports it.
+   ================================================================= */
+:root {
+    /* clearance so the pin engages below the floating nav pill,
+       instead of slamming the heading flush against the top edge */
+    --testimonials-top: clamp(90px, 11vw, 132px);
+}
+
+.testimonials {
+    position: relative;
+    background: var(--bg-void);
+    padding: clamp(90px, 12vw, 160px) 0;
+}
+
+.testimonials__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 64px);
+}
+
+.testimonials__head {
+    max-width: 640px;
+    margin: 0 0 clamp(56px, 8vw, 96px);
+}
+
+.testimonials__kicker {
+    margin: 0 0 16px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--blue);
+    opacity: 0.85;
+}
+
+.testimonials__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(28px, 3.6vw, 46px);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin: 0;
+    color: var(--white);
+}
+
+/* -------- mobile-first: plain vertical column -------- */
+.testimonials__viewport {
+    overflow: visible;
+}
+
+.testimonials__track {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.testimonials__card {
+    width: auto;
+    flex: none;
+    padding: 28px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background:
+        radial-gradient(120% 140% at 100% 0%, var(--blue-glow), transparent 60%),
+        var(--surface-2);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.testimonials__mark {
+    font-family: var(--font-display);
+    font-size: 44px;
+    line-height: 0.6;
+    color: var(--blue);
+    opacity: 0.85;
+}
+
+.testimonials__text {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--white);
+}
+
+.testimonials__author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+}
+
+.testimonials__avatar {
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--blue);
+    background: var(--blue-glow);
+    border: 1px solid var(--border-blue);
+}
+
+.testimonials__author-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.testimonials__name {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--white);
+}
+
+.testimonials__role {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+}
+
+/* =================================================================
+   DESKTOP — the pinned horizontal track. js/testimonials.js only
+   creates the ScrollTrigger at this same breakpoint.
+   ================================================================= */
+@media (min-width: 861px) {
+    /* tighter than the mobile-first defaults — while pinned, the
+       heading + card row need to fit inside one viewport height
+       without either getting clipped at the bottom */
+    .testimonials {
+        padding: clamp(48px, 6vw, 84px) 0;
+    }
+
+    .testimonials__head {
+        margin-bottom: clamp(28px, 3.4vw, 44px);
+    }
+
+    .testimonials__viewport {
+        overflow: hidden;
+    }
+
+    .testimonials__track {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: clamp(24px, 2.6vw, 40px);
+        will-change: transform;
+    }
+
+    .testimonials__card {
+        width: clamp(380px, 32vw, 480px);
+        flex: 0 0 clamp(380px, 32vw, 480px);
+        padding: clamp(28px, 2.6vw, 40px);
+        min-height: 260px;
+    }
+
+    .testimonials__mark {
+        font-size: 48px;
+    }
+
+    .testimonials__text {
+        font-size: 17px;
+    }
+}
+
+/* =================================================================
+   Reduced motion — always the plain column, never the scroll-jack,
+   regardless of viewport width. js/testimonials.js checks this same
+   query before touching GSAP.
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+    .testimonials__viewport {
+        overflow: visible !important;
+    }
+
+    .testimonials__track {
+        display: flex !important;
+        flex-direction: column !important;
+        transform: none !important;
+    }
+
+    .testimonials__card {
+        width: auto !important;
+        flex: none !important;
+    }
+}

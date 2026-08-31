@@ -1,0 +1,249 @@
+@charset "UTF-8";
+
+/* =================================================================
+   RESULTS — "Resultados que falam por si". Horizontal rail of case
+   cards. Mobile-first: static 2-col grid with everything visible.
+   On pointer-precise + hover-capable + wide viewports, upgrades to
+   a single flex row where the hovered/focused card expands and its
+   siblings cede space (pure CSS, :has() — no JS needed).
+   ================================================================= */
+.results {
+    position: relative;
+    background: var(--bg-void);
+    padding: clamp(90px, 12vw, 160px) 0;
+}
+
+.results__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 64px);
+}
+
+.results__head {
+    max-width: 640px;
+    margin: 0 0 clamp(48px, 7vw, 80px);
+}
+
+.results__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(30px, 4vw, 52px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    margin: 0 0 14px;
+    color: var(--white);
+}
+
+.results__subtitle {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+}
+
+/* -------- mobile-first: static grid, everything visible -------- */
+.results__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.results__card {
+    container-type: inline-size;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 260px;
+    padding: clamp(18px, 2.2vw, 28px);
+    background:
+        radial-gradient(120% 140% at 100% 0%, var(--blue-glow), transparent 60%),
+        var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    text-decoration: none;
+    color: var(--white);
+    overflow: hidden;
+}
+
+.results__compact {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.results__cat {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.results__spark {
+    width: 100%;
+    max-width: 120px;
+    height: auto;
+    opacity: 0.8;
+}
+
+.results__metric-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.results__metric {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--white);
+    transition: font-size 0.45s cubic-bezier(.16, .8, .3, 1);
+}
+
+.results__metric-label {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.results__expand {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.results__desc {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--muted);
+}
+
+.results__stats {
+    list-style: none;
+    margin: 0;
+    padding: 12px 0 0;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.results__stats li {
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    color: var(--muted);
+}
+
+.results__stats li span {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    color: var(--white);
+    margin-right: 4px;
+}
+
+.results__cta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue);
+}
+
+/* =================================================================
+   ENHANCED DESKTOP/TABLET — real hover + enough room: single row,
+   hovered/focused card expands, siblings shrink. Height stays fixed
+   the whole time (only widths change) so nothing else on the page
+   ever shifts.
+   ================================================================= */
+@media (hover: hover) and (pointer: fine) and (min-width: 900px) {
+    .results__row {
+        display: flex;
+        align-items: stretch;
+        gap: 6px;
+        height: clamp(380px, 36vw, 480px);
+    }
+
+    .results__card {
+        flex: 1 1 0%;
+        min-width: 0;
+        min-height: 0;
+        height: 100%;
+        transition: flex-grow 0.45s cubic-bezier(.16, .8, .3, 1);
+    }
+
+    .results__card:hover,
+    .results__card:focus-visible {
+        flex-grow: 4;
+        outline: none;
+    }
+
+    .results__row:has(.results__card:hover) .results__card:not(:hover),
+    .results__row:has(.results__card:focus-visible) .results__card:not(:focus-visible) {
+        flex-grow: 0.65;
+    }
+
+    .results__spark {
+        max-width: 160px;
+    }
+
+    /* container query: the metric grows with the card's own width,
+       not the viewport, so it scales correctly whether the card is
+       collapsed (~110px) or expanded (~600px+) */
+    @container (min-width: 260px) {
+        .results__metric {
+            font-size: 56px;
+        }
+    }
+
+    @container (min-width: 460px) {
+        .results__metric {
+            font-size: 84px;
+        }
+    }
+
+    .results__expand {
+        opacity: 0;
+        transform: translateY(12px);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        transition-delay: 0s;
+    }
+
+    .results__card:hover .results__expand,
+    .results__card:focus-visible .results__expand {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.1s;
+    }
+
+    .results__stats li {
+        opacity: 0;
+        transform: translateX(10px);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        transition-delay: calc(0.12s + var(--i, 0) * 60ms);
+    }
+
+    .results__card:hover .results__stats li,
+    .results__card:focus-visible .results__stats li {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* =================================================================
+   Reduced motion — keep the interaction, drop the animated
+   interpolation so state changes are instant instead of smooth.
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+    .results__card,
+    .results__metric,
+    .results__expand,
+    .results__stats li {
+        transition: none !important;
+    }
+}

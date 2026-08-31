@@ -1,0 +1,108 @@
+@charset "UTF-8";
+
+/* =================================================================
+   PAIN — light "problem statement" break before the dark solutions
+   section, zig-zagging left/right down the page.
+   ================================================================= */
+.pain {
+    position: relative;
+    background: #f4f4f4;
+    color: #0a0a0a;
+    padding: clamp(90px, 12vw, 160px) 0;
+    overflow: hidden;
+}
+
+.pain__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 64px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(90px, 14vw, 220px);
+}
+
+.pain__block {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 520px;
+    opacity: 0;
+    transform: translateY(36px);
+    transition: opacity 0.9s cubic-bezier(.16, .8, .3, 1), transform 0.9s cubic-bezier(.16, .8, .3, 1);
+}
+
+.pain__block.is-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.pain__block--right {
+    align-self: flex-end;
+    text-align: left;
+}
+
+.pain__block--left {
+    align-self: flex-start;
+}
+
+.pain__block--narrow {
+    max-width: 420px;
+}
+
+.pain__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(28px, 3.6vw, 46px);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin: 0;
+    color: #0a0a0a;
+}
+
+.pain__desc {
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.7;
+    color: #6b6b6b;
+    margin: 0;
+    max-width: 460px;
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    transition-delay: 0.15s;
+}
+
+.pain__block.is-in .pain__desc {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =================================================================
+   RESPONSIVE — stack full-width on narrower screens
+   ================================================================= */
+@media (max-width: 720px) {
+    .pain__block,
+    .pain__block--right,
+    .pain__block--left,
+    .pain__block--narrow {
+        align-self: stretch;
+        max-width: none;
+        text-align: left;
+    }
+
+    .pain__desc {
+        max-width: none;
+    }
+}
+
+/* =================================================================
+   Reduced motion
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+    .pain__block,
+    .pain__desc {
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}

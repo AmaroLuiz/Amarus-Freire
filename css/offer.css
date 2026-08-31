@@ -1,0 +1,250 @@
+@charset "UTF-8";
+
+/* =================================================================
+   OFFER — "O que fazemos para você". Minimalist editorial section:
+   white bg, black type, three huge disclosure rows that expand into
+   a horizontal marquee of services. Deliberately card-free.
+   ================================================================= */
+.offer {
+    position: relative;
+    background: #ffffff;
+    color: #0a0a0a;
+    padding: clamp(90px, 12vw, 160px) 0;
+}
+
+.offer__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 64px);
+}
+
+.offer__kicker {
+    margin: 0 0 clamp(48px, 7vw, 88px);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #6b6b6b;
+}
+
+.offer__list {
+    border-top: 1px solid rgba(10, 10, 10, 0.1);
+}
+
+.offer__row {
+    width: 100%;
+    border-bottom: 1px solid rgba(10, 10, 10, 0.1);
+    background: #ffffff;
+    transition: background 0.4s cubic-bezier(.16, .8, .3, 1), border-color 0.4s ease;
+}
+
+.offer__row-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 64px);
+}
+
+.offer__row.is-active {
+    background: #0a0a0a;
+    border-bottom-color: transparent;
+}
+
+.offer__trigger {
+    display: flex;
+    align-items: center;
+    gap: clamp(16px, 3vw, 32px);
+    width: 100%;
+    padding: clamp(22px, 4vw, 40px) 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.offer__trigger-num {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--blue);
+    opacity: 0.85;
+}
+
+.offer__trigger-text {
+    flex: 1 1 auto;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(40px, 7.4vw, 104px);
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    color: #0a0a0a;
+    transition: color 0.4s cubic-bezier(.16, .8, .3, 1);
+}
+
+.offer__row.is-active .offer__trigger-text {
+    color: #ffffff;
+}
+
+.offer__trigger-icon {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(36px, 4vw, 52px);
+    height: clamp(36px, 4vw, 52px);
+    border-radius: 50%;
+    border: 1px solid rgba(10, 10, 10, 0.18);
+    color: #0a0a0a;
+    transition: transform 0.4s cubic-bezier(.16, .8, .3, 1), border-color 0.4s ease, color 0.4s ease, background 0.4s ease;
+}
+
+.offer__trigger-icon svg {
+    width: 44%;
+    height: 44%;
+}
+
+.offer__row.is-active .offer__trigger-icon {
+    transform: rotate(90deg);
+    border-color: rgba(255, 255, 255, 0.35);
+    color: #ffffff;
+}
+
+/* -------- disclosure panel: height animated via grid-rows, no JS
+   measuring, no layout-jank -------- */
+.offer__panel-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.45s cubic-bezier(.16, .8, .3, 1);
+}
+
+.offer__row.is-active .offer__panel-wrap {
+    grid-template-rows: 1fr;
+}
+
+.offer__panel {
+    overflow: hidden;
+    min-height: 0;
+}
+
+.offer__track {
+    overflow: hidden;
+    padding-bottom: clamp(28px, 4vw, 48px);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+}
+
+.offer__marquee {
+    display: flex;
+    width: max-content;
+    animation: offer-marquee var(--marquee-duration, 32s) linear infinite;
+    animation-play-state: paused;
+}
+
+.offer__row.is-active .offer__marquee {
+    animation-play-state: running;
+}
+
+.offer__track:hover .offer__marquee {
+    animation-play-state: paused;
+}
+
+@keyframes offer-marquee {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+.offer__items {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.offer__item {
+    flex: 0 0 auto;
+    width: clamp(230px, 24vw, 300px);
+    padding-right: clamp(28px, 3vw, 40px);
+    margin-right: clamp(28px, 3vw, 40px);
+    border-right: 1px solid rgba(255, 255, 255, 0.14);
+    opacity: 0;
+    transform: translateX(14px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    transition-delay: calc(var(--i, 0) * 55ms);
+}
+
+.offer__row.is-active .offer__item {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.offer__item h3 {
+    margin: 0 0 8px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 1.25;
+    color: #ffffff;
+}
+
+.offer__item p {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* =================================================================
+   RESPONSIVE
+   ================================================================= */
+@media (max-width: 640px) {
+    .offer__trigger {
+        gap: 12px;
+    }
+
+    .offer__trigger-num {
+        display: none;
+    }
+
+    .offer__item {
+        width: 74vw;
+    }
+}
+
+/* =================================================================
+   Reduced motion — keep the disclosure interaction, drop the
+   marquee animation in favor of manual horizontal scroll so every
+   item stays reachable.
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+    .offer__row,
+    .offer__trigger-text,
+    .offer__trigger-icon,
+    .offer__panel-wrap,
+    .offer__item {
+        transition: none !important;
+    }
+
+    .offer__row.is-active .offer__trigger-icon {
+        transform: none;
+    }
+
+    .offer__item {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .offer__track {
+        overflow-x: auto;
+    }
+
+    .offer__marquee {
+        animation: none !important;
+    }
+}
