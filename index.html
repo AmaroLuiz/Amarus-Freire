@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="is-preloading">
 
 <head>
   <!--
@@ -41,8 +41,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="image" href="imagens/hero_banner_blue.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="imagens/logo.svg" fetchpriority="high">
   <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Michroma&family=Playfair+Display:wght@700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap"
     rel="stylesheet">
 
   <!-- bundled from hero/pain/home/offer/process/results/testimonials/faq/
@@ -77,6 +78,10 @@
 </head>
 
 <body>
+
+  <div id="preloader" aria-hidden="true">
+    <img class="preloader__logo" src="imagens/logo.svg" alt="" width="180" height="180" decoding="async">
+  </div>
 
   <header class="nav" id="nav">
     <div class="nav__inner">
@@ -125,10 +130,7 @@
       <div class="hero__inner">
         <h1 class="hero__title">Empresas pequenas<br>merecem software de<br>grandes empresas</h1>
         <p class="hero__desc">
-          It is a long established fact that a reader will be distracted by the
-          readable content of a page when looking at its layout. The point of
-          using Lorem Ipsum is that it has a more-or-less normal distribution
-          of letters, as opposed to using content here.
+          Sistemas, marketing e automação sob o mesmo teto. Construídos por quem programa, não por quem terceiriza.
         </p>
       </div>
 
@@ -146,46 +148,34 @@
       <div class="pain__inner">
 
         <div class="pain__block pain__block--right" data-reveal>
-          <h2 class="pain__title">Sua empresa perde tempo<br>com processos repetitivos.</h2>
+          <h2 class="pain__title">Sua equipe perde horas com trabalho manual.</h2>
           <p class="pain__desc">
-            It is a long established fact that a reader will be distracted by the
-            readable content of a page when looking at its layout. The point of
-            using Lorem Ipsum is thalt is a long established fact that a reader
-            will be distracted by the readable content of a page when looking
-            at its layout. The point of using Lorem Ipsum is that it has a more-or-less
+            Tarefas repetitivas consomem tempo, aumentam os erros e tiram sua equipe do que realmente precisa de
+            atenção.
           </p>
         </div>
 
         <div class="pain__block pain__block--left" data-reveal>
-          <h2 class="pain__title">Seu site não vende.</h2>
+          <h2 class="pain__title">Seu site atrai visitas, mas não converte.</h2>
           <p class="pain__desc">
-            It is a long established fact that a reader will be distracted by the
-            readable content of a page when looking at its layout. The point of
-            using Lorem Ipsum is thalt is a long established fact that a reader
-            will be distracted by the readable content of a page when looking
-            at its layout. The point of using Lorem Ipsum is that it has a more-or-less
+            Um site bonito não basta. Se ele não comunica seu valor e conduz o visitante à ação, você está deixando
+            oportunidades pelo caminho.
           </p>
         </div>
 
         <div class="pain__block pain__block--right pain__block--narrow" data-reveal>
-          <h2 class="pain__title">Seu marketing<br>não gera autoridade.</h2>
+          <h2 class="pain__title">Presente, mas sem autoridade.</h2>
           <p class="pain__desc">
-            It is a long established fact that a reader will be distracted by the
-            readable content of a page when looking at its layout. The point of
-            using Lorem Ipsum is thalt is a long established fact that a reader
-            will be distracted by the readable content of a page when looking
-            at its layout. The point of using Lorem Ipsum is that it has a more-or-less
+            Estar nas redes sociais não significa construir autoridade. Sua comunicação precisa transmitir confiança,
+            posicionamento e mostrar por que escolher sua empresa.
           </p>
         </div>
 
         <div class="pain__block pain__block--left" data-reveal>
-          <h2 class="pain__title">Enquanto isso,<br>seus concorrentes<br>automatizam tudo.</h2>
+          <h2 class="pain__title">Sua concorrência já automatizou tudo.</h2>
           <p class="pain__desc">
-            It is a long established fact that a reader will be distracted by the
-            readable content of a page when looking at its layout. The point of
-            using Lorem Ipsum is thalt is a long established fact that a reader
-            will be distracted by the readable content of a page when looking
-            at its layout. The point of using Lorem Ipsum is that it has a more-or-less
+            Automação e sistemas inteligentes já permitem fazer mais com menos esforço. Quanto mais tempo sua empresa
+            demora para evoluir, maior fica essa diferença.
           </p>
         </div>
 
@@ -228,7 +218,8 @@
             <span class="block-num">01</span>
             <div>
               <h3>Software</h3>
-              <p class="block-desc">Sistemas e interfaces construídos sob medida — não adaptados de um template.</p>
+              <p class="block-desc">Cada negócio funciona de um jeito. Por isso, seus sistemas e interfaces devem ser
+                pensados para a sua realidade, não adaptados de algo pronto.</p>
             </div>
           </div>
 
@@ -441,7 +432,8 @@
             <span class="block-num">02</span>
             <div>
               <h3>Marketing</h3>
-              <p class="block-desc">Estratégia digital orientada por dado, do posicionamento à conversão.</p>
+              <p class="block-desc">Do posicionamento à conversão, cada ação tem um propósito: fazer sua marca ganhar
+                relevância e trazer mais oportunidades para o negócio.</p>
             </div>
           </div>
 
@@ -651,7 +643,8 @@
             <span class="block-num">03</span>
             <div>
               <h3>Automação</h3>
-              <p class="block-desc">Processos e ferramentas conectados para eliminar trabalho manual.</p>
+              <p class="block-desc">Sua equipe não precisa gastar tempo fazendo o que a tecnologia pode fazer por ela.
+                Automatizamos processos e conectamos ferramentas para deixar a operação mais simples.</p>
             </div>
           </div>
 
@@ -843,10 +836,10 @@
                         <h3>Sites Institucionais</h3>
                         <p>Presença digital sólida que comunica autoridade e credibilidade da marca.</p>
                       </li>
-                      <li class="offer__item" style="--i:2">
+                      <!-- <li class="offer__item" style="--i:2">
                         <h3>E-commerce</h3>
                         <p>Lojas virtuais completas, do catálogo ao checkout, prontas para vender.</p>
-                      </li>
+                      </li> -->
                       <li class="offer__item" style="--i:3">
                         <h3>Sistemas Web Personalizados</h3>
                         <p>Soluções sob medida para processos e regras de negócio específicas.</p>
@@ -869,10 +862,10 @@
                         <h3>Sites Institucionais</h3>
                         <p>Presença digital sólida que comunica autoridade e credibilidade da marca.</p>
                       </li>
-                      <li class="offer__item">
+                      <!-- <li class="offer__item">
                         <h3>E-commerce</h3>
                         <p>Lojas virtuais completas, do catálogo ao checkout, prontas para vender.</p>
-                      </li>
+                      </li> -->
                       <li class="offer__item">
                         <h3>Sistemas Web Personalizados</h3>
                         <p>Soluções sob medida para processos e regras de negócio específicas.</p>
@@ -919,10 +912,10 @@
                         <h3>Criação de Conteúdo</h3>
                         <p>Materiais estratégicos que educam, engajam e convertem.</p>
                       </li>
-                      <li class="offer__item" style="--i:2">
+                      <!-- <li class="offer__item" style="--i:2">
                         <h3>Identidade Visual</h3>
                         <p>Marca coesa e memorável em todos os pontos de contato.</p>
-                      </li>
+                      </li> -->
                       <li class="offer__item" style="--i:3">
                         <h3>Estratégia Digital</h3>
                         <p>Planejamento orientado por dado, do posicionamento à conversão.</p>
@@ -949,10 +942,10 @@
                         <h3>Criação de Conteúdo</h3>
                         <p>Materiais estratégicos que educam, engajam e convertem.</p>
                       </li>
-                      <li class="offer__item">
+                      <!-- <li class="offer__item">
                         <h3>Identidade Visual</h3>
                         <p>Marca coesa e memorável em todos os pontos de contato.</p>
-                      </li>
+                      </li> -->
                       <li class="offer__item">
                         <h3>Estratégia Digital</h3>
                         <p>Planejamento orientado por dado, do posicionamento à conversão.</p>
@@ -1068,13 +1061,14 @@
       <div class="results__inner">
         <div class="results__head">
           <h2 id="results-heading" class="results__title">Resultados que falam por si</h2>
-          <p class="results__subtitle">Cada número aqui é reflexo direto do trabalho entregue — não promessa, resultado.
+          <p class="results__subtitle">Não falamos apenas sobre resultados. Mostramos o que o nosso trabalho foi capaz
+            de entregar na prática.
           </p>
         </div>
 
         <div class="results__row">
 
-          <a class="results__card" href="#solutions" aria-label="Ver projeto: Landing Page — +42% de conversão">
+          <a class="results__card" href="#solutions" aria-label="Ver projeto: Landing Page — +42% de conversão" data-reveal style="--i:0">
             <div class="results__compact">
               <span class="results__cat">Landing Page</span>
               <svg class="results__spark" viewBox="0 0 120 48" fill="none" aria-hidden="true">
@@ -1094,59 +1088,56 @@
                 <li style="--i:1"><span>+68%</span> leads</li>
                 <li style="--i:2"><span>-31%</span> custo por lead</li>
               </ul>
-              <span class="results__cta">Ver projeto <span aria-hidden="true">→</span></span>
             </div>
           </a>
 
-          <a class="results__card" href="#solutions" aria-label="Ver projeto: E-commerce — +85% de vendas">
+          <a class="results__card" href="#solutions" aria-label="Ver projeto: E-commerce — +85% de vendas" data-reveal style="--i:1">
             <div class="results__compact">
-              <span class="results__cat">E-commerce</span>
+              <span class="results__cat">AUTOMAtize PROCESSOS</span>
               <svg class="results__spark" viewBox="0 0 120 48" fill="none" aria-hidden="true">
-                <polyline points="0,36 20,38 40,26 60,30 80,14 100,18 120,4" stroke="#155EE7" stroke-width="2.2"
+                <polyline points="0,8 20,16 40,12 60,26 80,22 100,36 120,40" stroke="#155EE7" stroke-width="2.2"
                   fill="none" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
               <div class="results__metric-block">
-                <span class="results__metric">+85%</span>
-                <span class="results__metric-label">Vendas</span>
+                <span class="results__metric">−70%</span>
+                <span class="results__metric-label">Tarefas manuais</span>
               </div>
             </div>
             <div class="results__expand">
-              <p class="results__desc">Loja virtual reconstruída do zero para eliminar fricção no checkout e aumentar o
-                ticket médio.</p>
+              <p class="results__desc">Processos repetitivos automatizados para reduzir trabalho manual,
+                diminuir erros e devolver horas para a equipe.</p>
               <ul class="results__stats">
-                <li style="--i:0"><span>+85%</span> vendas</li>
-                <li style="--i:1"><span>+54%</span> ticket médio</li>
-                <li style="--i:2"><span>-22%</span> abandono de carrinho</li>
+                <li style="--i:0"><span>-70%</span> tarefas manuais</li>
+                <li style="--i:1"><span>18h</span> economizadas / mês</li>
+                <li style="--i:2"><span>-45%</span> erros operacionais</li>
               </ul>
-              <span class="results__cta">Ver projeto <span aria-hidden="true">→</span></span>
             </div>
           </a>
 
-          <a class="results__card" href="#solutions" aria-label="Ver projeto: Automação — atendimento 24h">
+          <a class="results__card" href="#solutions" aria-label="Ver projeto: Automação — atendimento 24h" data-reveal style="--i:2">
             <div class="results__compact">
-              <span class="results__cat">Automação</span>
+              <span class="results__cat">INTEGRAÇÕES</span>
               <svg class="results__spark" viewBox="0 0 120 48" fill="none" aria-hidden="true">
                 <polyline points="0,32 20,34 40,20 60,24 80,10 100,16 120,6" stroke="#155EE7" stroke-width="2.2"
                   fill="none" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
               <div class="results__metric-block">
-                <span class="results__metric">24h</span>
-                <span class="results__metric-label">Atendimento</span>
+                <span class="results__metric">8+</span>
+                <span class="results__metric-label">Ferramentas conectadas</span>
               </div>
             </div>
             <div class="results__expand">
               <p class="results__desc">Fluxo de atendimento automatizado que qualifica leads e responde clientes em
                 tempo real, todos os dias.</p>
               <ul class="results__stats">
-                <li style="--i:0"><span>24h</span> atendimento contínuo</li>
-                <li style="--i:1"><span>+73%</span> respostas</li>
-                <li style="--i:2"><span>-40%</span> tempo de resposta</li>
+                <li style="--i:0"><span>8+</span> ferramentas integradas</li>
+                <li style="--i:1"><span>−60%</span> lançamentos manuais</li>
+                <li style="--i:2"><span>100%</span> dados sincronizados</li>
               </ul>
-              <span class="results__cta">Ver projeto <span aria-hidden="true">→</span></span>
             </div>
           </a>
 
-          <a class="results__card" href="#solutions" aria-label="Ver projeto: Tráfego Pago — 3.2x de ROAS">
+          <a class="results__card" href="#solutions" aria-label="Ver projeto: Tráfego Pago — 3.2x de ROAS" data-reveal style="--i:3">
             <div class="results__compact">
               <span class="results__cat">Tráfego Pago</span>
               <svg class="results__spark" viewBox="0 0 120 48" fill="none" aria-hidden="true">
@@ -1166,11 +1157,10 @@
                 <li style="--i:1"><span>-28%</span> CPA</li>
                 <li style="--i:2"><span>+61%</span> cliques qualificados</li>
               </ul>
-              <span class="results__cta">Ver projeto <span aria-hidden="true">→</span></span>
             </div>
           </a>
 
-          <a class="results__card" href="#solutions" aria-label="Ver projeto: Dashboard — -60% no tempo de análise">
+          <a class="results__card" href="#solutions" aria-label="Ver projeto: Dashboard — -60% no tempo de análise" data-reveal style="--i:4">
             <div class="results__compact">
               <span class="results__cat">Dashboard</span>
               <svg class="results__spark" viewBox="0 0 120 48" fill="none" aria-hidden="true">
@@ -1190,7 +1180,29 @@
                 <li style="--i:1"><span>+100%</span> visibilidade</li>
                 <li style="--i:2">decisões <span>em tempo real</span></li>
               </ul>
-              <span class="results__cta">Ver projeto <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+
+          <a class="results__card" href="#solutions" aria-label="Ver projeto: Redes Sociais — +180% de engajamento" data-reveal style="--i:5">
+            <div class="results__compact">
+              <span class="results__cat">Redes Sociais</span>
+              <svg class="results__spark" viewBox="0 0 120 48" fill="none" aria-hidden="true">
+                <polyline points="0,38 20,34 40,30 60,22 80,18 100,10 120,4" stroke="#155EE7" stroke-width="2.2"
+                  fill="none" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <div class="results__metric-block">
+                <span class="results__metric">+100%</span>
+                <span class="results__metric-label">Engajamento</span>
+              </div>
+            </div>
+            <div class="results__expand">
+              <p class="results__desc">Estratégia de conteúdo reestruturada para aumentar alcance orgânico e
+                fortalecer a autoridade da marca.</p>
+              <ul class="results__stats">
+                <li style="--i:0"><span>+100%</span> engajamento</li>
+                <li style="--i:1"><span>+65%</span> seguidores</li>
+                <li style="--i:2"><span>3x</span> alcance orgânico</li>
+              </ul>
             </div>
           </a>
 
@@ -1416,8 +1428,7 @@
             </button>
             <div class="faq__answer-wrap">
               <div class="faq__answer" id="faq-answer-2" role="region" aria-labelledby="faq-question-2">
-                <p>Sim. Já trabalhamos com pequenos negócios, prestadores de serviço e empresas em crescimento — de
-                  e-commerce a distribuidoras. O que muda é a profundidade do projeto, não a qualidade da entrega.</p>
+                <p>Sim. Já trabalhamos com pequenos negócios, prestadores de serviço e empresas em crescimento. O que muda é a profundidade do projeto, não a qualidade da entrega.</p>
               </div>
             </div>
           </div>
@@ -1626,12 +1637,14 @@
 
   <script src="js/hero.js" defer></script>
   <script src="js/pain.js" defer></script>
+  <script src="js/results.js" defer></script>
   <script src="js/offer.js" defer></script>
   <script src="js/home.js" defer></script>
   <script src="js/footer.js" defer></script>
 
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+  <script src="js/preloader.js" defer></script>
   <script src="js/process.js" defer></script>
   <script src="js/testimonials.js" defer></script>
   <script src="js/faq.js" defer></script>

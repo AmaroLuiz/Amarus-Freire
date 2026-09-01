@@ -6,10 +6,24 @@
    On pointer-precise + hover-capable + wide viewports, upgrades to
    a single flex row where the hovered/focused card expands and its
    siblings cede space (pure CSS, :has() — no JS needed).
+
+   WHITE GLASS: cards are a translucent white pane (not a dark/blue
+   tint) floating over the section's own dark background — the near-
+   black bg shows through at ~25% to keep it from reading as opaque
+   white, which is also why the resting alpha sits at the *top* of
+   the usual 0.55–0.75 glass range: any lower and the blend with the
+   near-black backdrop drops the surface into a mid-grey that fails
+   contrast for text/accents sitting on it. The brand blue is kept to
+   a single micro-accent (the CTA arrow) — never a card fill or glow.
    ================================================================= */
 .results {
     position: relative;
-    background: var(--bg-void);
+    /* faint neutral light pools give the glass something to catch —
+       still reads as the same dark section, not a new background */
+    background:
+        radial-gradient(55% 45% at 18% 8%, rgba(255, 255, 255, 0.05), transparent 60%),
+        radial-gradient(50% 45% at 88% 35%, rgba(255, 255, 255, 0.035), transparent 65%),
+        var(--bg-void);
     padding: clamp(90px, 12vw, 160px) 0;
 }
 
@@ -51,23 +65,80 @@
 
 .results__card {
     container-type: inline-size;
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     gap: 20px;
     min-height: 260px;
     padding: clamp(18px, 2.2vw, 28px);
-    background:
-        radial-gradient(120% 140% at 100% 0%, var(--blue-glow), transparent 60%),
-        var(--surface-2);
-    border: 1px solid var(--border);
-    border-radius: 2px;
+    /* white glass surface: a plain translucent white fill (kept as a
+       solid color, not a gradient, so it can transition smoothly on
+       hover — gradients can't interpolate) plus separate pseudo-
+       element layers for the highlight/sheen on top */
+    background-color: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-top-color: rgba(255, 255, 255, 0.9);
+    border-radius: 24px;
+    box-shadow:
+        0 24px 60px -24px rgba(0, 0, 0, 0.45),
+        0 8px 32px rgba(255, 255, 255, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.85),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.14);
     text-decoration: none;
-    color: var(--white);
+    color: #4B4F58;
     overflow: hidden;
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+        opacity 0.6s cubic-bezier(.16, .8, .3, 1) calc(var(--i, 0) * 80ms),
+        transform 0.6s cubic-bezier(.16, .8, .3, 1) calc(var(--i, 0) * 80ms),
+        background-color 0.4s ease,
+        border-color 0.4s ease,
+        box-shadow 0.4s ease,
+        backdrop-filter 0.4s ease;
+}
+
+.results__card.is-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* vertical sheen — soft white-to-transparent wash from the top edge,
+   like light landing on the glass; overlay blend keeps it from
+   flattening the surface into a flat white slab */
+.results__card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 45%);
+    mix-blend-mode: overlay;
+    pointer-events: none;
+}
+
+/* soft diagonal highlight bloom — always faintly present, brightens
+   on hover/focus. White only, standing in for a light reflection */
+.results__card::after {
+    content: "";
+    position: absolute;
+    top: -20%;
+    left: -10%;
+    z-index: 0;
+    width: 70%;
+    height: 70%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.55), transparent 70%);
+    opacity: 0.3;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
 }
 
 .results__compact {
+    position: relative;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     gap: 14px;
@@ -78,14 +149,14 @@
     font-size: 11px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: #6B6F78;
 }
 
 .results__spark {
     width: 100%;
     max-width: 120px;
     height: auto;
-    opacity: 0.8;
+    opacity: 0.85;
 }
 
 .results__metric-block {
@@ -100,17 +171,19 @@
     font-size: 40px;
     line-height: 1;
     letter-spacing: -0.01em;
-    color: var(--white);
+    color: #111318;
     transition: font-size 0.45s cubic-bezier(.16, .8, .3, 1);
 }
 
 .results__metric-label {
     font-family: var(--font-body);
     font-size: 13px;
-    color: var(--muted);
+    color: #6B6F78;
 }
 
 .results__expand {
+    position: relative;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -121,14 +194,14 @@
     font-family: var(--font-body);
     font-size: 13.5px;
     line-height: 1.65;
-    color: var(--muted);
+    color: #55585F;
 }
 
 .results__stats {
     list-style: none;
     margin: 0;
     padding: 12px 0 0;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -137,13 +210,13 @@
 .results__stats li {
     font-family: var(--font-body);
     font-size: 13.5px;
-    color: var(--muted);
+    color: #55585F;
 }
 
 .results__stats li span {
     font-family: var(--font-mono);
-    font-weight: 500;
-    color: var(--white);
+    font-weight: 600;
+    color: #111318;
     margin-right: 4px;
 }
 
@@ -152,7 +225,15 @@
     font-size: 12px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--blue);
+    color: #3A3E46;
+}
+
+/* the arrow is the one deliberate blue micro-accent on the whole
+   card — a small interactive indicator, never the label text itself */
+.results__cta span {
+    display: inline-block;
+    color: #155EE7;
+    transition: transform 0.3s cubic-bezier(.16, .8, .3, 1);
 }
 
 /* =================================================================
@@ -174,13 +255,40 @@
         min-width: 0;
         min-height: 0;
         height: 100%;
-        transition: flex-grow 0.45s cubic-bezier(.16, .8, .3, 1);
+        transition:
+            flex-grow 0.45s cubic-bezier(.16, .8, .3, 1),
+            opacity 0.6s cubic-bezier(.16, .8, .3, 1) calc(var(--i, 0) * 80ms),
+            transform 0.45s cubic-bezier(.16, .8, .3, 1) calc(var(--i, 0) * 80ms),
+            background-color 0.4s ease,
+            border-color 0.4s ease,
+            box-shadow 0.4s ease,
+            backdrop-filter 0.4s ease;
     }
 
     .results__card:hover,
     .results__card:focus-visible {
         flex-grow: 4;
         outline: none;
+        transform: translateY(-6px);
+        background-color: rgba(255, 255, 255, 0.85);
+        border-color: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(26px) saturate(150%);
+        -webkit-backdrop-filter: blur(26px) saturate(150%);
+        box-shadow:
+            0 36px 80px -20px rgba(0, 0, 0, 0.55),
+            0 10px 46px rgba(255, 255, 255, 0.09),
+            inset 0 1px 0 rgba(255, 255, 255, 0.95),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.24);
+    }
+
+    .results__card:hover::after,
+    .results__card:focus-visible::after {
+        opacity: 0.6;
+    }
+
+    .results__card:hover .results__cta span,
+    .results__card:focus-visible .results__cta span {
+        transform: translateX(3px);
     }
 
     .results__row:has(.results__card:hover) .results__card:not(:hover),
@@ -243,7 +351,13 @@
     .results__card,
     .results__metric,
     .results__expand,
-    .results__stats li {
+    .results__stats li,
+    .results__cta span {
         transition: none !important;
+    }
+
+    .results__card {
+        opacity: 1;
+        transform: none;
     }
 }

@@ -1,0 +1,37 @@
+@charset "UTF-8";
+
+/* =================================================================
+   PRELOADER — brand entrance. The mark itself "opens" the site
+   (rotate + scale into an impact zoom) instead of a generic spinner.
+   Locked to prefers-reduced-motion and removed from the DOM once
+   played, so it never lingers to block layout or clicks.
+   ================================================================= */
+html.is-preloading,
+html.is-preloading body {
+    overflow: hidden;
+    height: 100%;
+}
+
+#preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at center, #161616 0%, #0D0D0D 30%, #050505 60%, #000000 100%);
+}
+
+.preloader__logo {
+    display: block;
+    width: clamp(96px, 20vw, 180px);
+    height: auto;
+    transform: scale(0.5);
+    will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .preloader__logo {
+        transform: none;
+    }
+}

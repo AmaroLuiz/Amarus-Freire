@@ -6,6 +6,7 @@
     --surface-2: #0D1420;
     --blue: #155EE7;
     --blue-glow: rgba(21, 94, 231, 0.20);
+    --blue-text: #6E9CF5;
     --white: #F5F7FA;
     --muted: #AAB2C0;
     --border: rgba(255, 255, 255, 0.10);
@@ -141,7 +142,7 @@ body {
     font-size: 11px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--blue);
+    color: var(--blue-text);
     margin: 0 0 18px;
     opacity: 0.85;
 }
@@ -187,7 +188,7 @@ body {
 .block-num {
     font-family: var(--font-mono);
     font-size: 13px;
-    color: var(--blue);
+    color: var(--blue-text);
     letter-spacing: 0.08em;
     padding-top: 10px;
     opacity: 0.8;
