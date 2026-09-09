@@ -849,6 +849,20 @@ body {
     overflow: visible;
 }
 
+/* fills the frame edge to edge (ignores .art-frame's own padding —
+   percentage padding is always width-relative, which is fine for
+   the hand-drawn SVGs it was tuned around, but not for photos here).
+   object-fit:fill stretches rather than crops, so every pixel of
+   the source image stays visible even if its aspect ratio doesn't
+   match the frame's. */
+.art-frame img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+}
+
 .visual-dots {
     position: absolute;
     left: 50%;
