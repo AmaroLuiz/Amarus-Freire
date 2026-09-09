@@ -31,7 +31,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 40px;
-    width: min(600px, 100%);
+    width: min(400px, 100%);
     padding: 10px 10px 10px 22px;
     background: rgba(8, 13, 21, 0.9);
     border-radius: 3px;
@@ -55,6 +55,43 @@
     font-size: 13px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
+}
+
+/* Icon mark and wordmark crossfade in place, on a loop — the stage's
+   own size is fixed (sized for the wider wordmark) so neither image
+   swapping in ever shifts the toggle button next to it. */
+.nav__logo-stage {
+    position: relative;
+    width: clamp(80px, 10.6vw, 112px);
+    height: 22px;
+}
+
+.nav__logo-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    opacity: 0;
+    animation: nav-logo-fade 7s ease-in-out infinite;
+}
+
+.nav__logo-img--word {
+    animation-delay: -3.5s;
+}
+
+@keyframes nav-logo-fade {
+    0%, 42% {
+        opacity: 1;
+    }
+    50%, 92% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 .nav__toggle {
@@ -107,7 +144,7 @@
 
 .nav__menu {
     pointer-events: none;
-    width: min(600px, 100%);
+    width: min(400px, 100%);
     display: grid;
     grid-template-rows: 0fr;
     transition: grid-template-rows 0.35s cubic-bezier(.16, .8, .3, 1);
@@ -196,8 +233,16 @@
 
 .nav__menu-action {
     flex: 1 1 0;
-    padding: 13px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Its sibling ("Agendar conversa") wraps to two lines at this
+       width, stretching both buttons to match via the row's default
+       align-items:stretch — without this, a one-line label like
+       "Começar projeto" just sits at the top of that taller box
+       instead of centered in it. */
     text-align: center;
+    padding: 13px 14px;
     border-radius: 12px;
     background: transparent;
     border: 1px solid var(--border);
@@ -290,8 +335,8 @@
     gap: clamp(24px, 6vw, 96px);
     max-width: 1440px;
     width: 100%;
-    margin: 100px auto;
-    padding: 0 clamp(20px, 5vw, 64px) clamp(64px, 9vw, 120px);
+    margin: clamp(80px, 11vw, 120px) auto 0;
+    padding: 0 clamp(20px, 5vw, 64px) clamp(24px, 3.5vw, 44px);
 }
 
 .hero__title {
@@ -410,6 +455,15 @@
         animation: none !important;
         opacity: 1 !important;
         transform: none !important;
+    }
+
+    .nav__logo-img {
+        animation: none !important;
+        opacity: 0 !important;
+    }
+
+    .nav__logo-img--word {
+        opacity: 1 !important;
     }
 }
 
@@ -1343,7 +1397,8 @@ body {
        .process__card below), so it stays lean on purpose. */
     --process-top: clamp(96px, 10vw, 110px);
     /* overlap step between cards AND the sticky-duration unit (see
-       .process__card-slot) — smaller on narrow screens, below */
+       .process__card-slot) — same value at every width so the
+       stacking timing/feel on mobile matches desktop exactly */
     --process-peek: 60px;
 }
 
@@ -1397,12 +1452,13 @@ body {
 }
 
 .process__card {
-    /* Vertical padding trimmed down from what it was — every px here
-       eats into the room a card has below its own sticky point (see
-       --process-top above), and this is the single biggest lever for
-       keeping the card's total height inside that budget on shorter
-       screens without clipping anything. */
-    padding: clamp(24px, 3vw, 36px) clamp(20px, 3vw, 40px);
+    /* Top padding kept small and fixed on purpose: the number/title
+       row has to fit inside --process-peek (60px) before the next
+       card's opaque background starts covering it, or its bottom
+       gets clipped — that's what the corrupted-looking overlap in
+       the field screenshots actually was. Bottom padding stays
+       generous since nothing covers it from below. */
+    padding: 16px clamp(20px, 3vw, 40px) clamp(24px, 3vw, 36px);
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: start;
@@ -1416,7 +1472,11 @@ body {
     grid-column: 1;
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: clamp(32px, 3.6vw, 56px);
+    /* Capped well below its old 56px max — at line-height:1 this is
+       the number/title row's own height, which has to clear
+       --process-peek (60px) minus the card's top padding (16px), see
+       .process__card above. */
+    font-size: clamp(26px, 2.4vw, 36px);
     line-height: 1;
     letter-spacing: -0.01em;
     color: var(--white);
@@ -1442,7 +1502,8 @@ body {
 .process__card-title {
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: clamp(28px, 3.4vw, 52px);
+    /* Same clearance reasoning as .process__num above. */
+    font-size: clamp(24px, 2.4vw, 36px);
     line-height: 1;
     letter-spacing: -0.02em;
     margin: 0;
@@ -1498,23 +1559,28 @@ body {
 }
 
 /* =================================================================
-   NARROW SCREENS — same sticky-stacking mechanic (it's plain CSS, it
-   just works at every width), only tuned down: a smaller peek/dwell
-   step keeps the overlap and per-card scroll distance from feeling
-   oversized on a short, narrow viewport. Only the card's INTERNAL
-   layout otherwise changes: the 3-column grid (number | title+tag+
-   list | description) is far too tight under ~720px, so it collapses
-   to a single stacked column there.
+   NARROW SCREENS — same sticky-stacking mechanic, same peek/timing
+   as desktop (--process-peek is not overridden here on purpose, so
+   the animation feels identical). Only the card's INTERNAL layout
+   changes: the 3-column grid (number | title+tag+list | description)
+   is far too tight under ~720px, so it collapses to a single stacked
+   column there.
    ================================================================= */
 @media (max-width: 720px) {
-    .process {
-        --process-peek: 36px;
+    :root {
+        /* num/main/desc stack into one column here (below), which
+           runs taller than desktop's 3-column row — trimmed a bit
+           further so the same --process-peek step above still leaves
+           enough room on short phones. */
+        --process-top: 76px;
     }
 
     .process__card {
         grid-template-columns: 1fr;
-        row-gap: 20px;
-        padding: 28px 20px;
+        row-gap: 12px;
+        /* top stays small for the same peek-clearance reason as the
+           base rule — see .process__num/.process__card-title below */
+        padding: 16px 20px 22px;
     }
 
     .process__num,
@@ -1524,11 +1590,11 @@ body {
     }
 
     .process__num {
-        font-size: 32px;
+        font-size: 28px;
     }
 
     .process__card-title {
-        font-size: clamp(30px, 9vw, 44px);
+        font-size: clamp(26px, 8vw, 34px);
     }
 
     .process__card-desc {
