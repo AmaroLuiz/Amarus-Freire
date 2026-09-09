@@ -1320,20 +1320,27 @@ body {
 /* ============ process.css ============ */
 
 /* =================================================================
-   PROCESS — sequential stacking cards. All 4 .process__card panels
-   occupy the exact same rectangle inside .process__track (absolute,
-   inset:0). js/process.js pins the track (GSAP ScrollTrigger,
-   pin:true) and scrubs each card's translateY from "below the
-   viewport" (yPercent:100) up to its resting spot (yPercent:0), one
-   after another — the moving panel is the effect, driven 1:1 by
-   scroll progress. z-index (via --index) plus the incoming card
-   being fully opaque is what makes it physically cover the one
-   before it; no opacity/fade/blur is ever used for that.
+   PROCESS — sequential stacking cards, pure CSS position:sticky
+   (no JS, no GSAP, no pin, no scale/transform). Each .process__card
+   sits inside a .process__card-slot wrapper that carries the sticky
+   mechanics; the card itself stays a plain, statically-styled box.
+
+   The slot's top offset increases by --process-peek per card index,
+   so each new card sticks that much lower than the one before it —
+   that fixed offset IS the overlap/peek amount (how much of the
+   previous card stays visible above the incoming one). Its
+   padding-bottom shrinks by the same amount per index, which is what
+   controls dwell time: more padding means more scroll distance
+   before the slot's own box scrolls out from under its sticky point,
+   so it holds its position longer before the next card covers it.
+   The last card gets zero padding — it settles once and the section
+   ends right there, with no extra scroll tacked on.
    ================================================================= */
 :root {
     --process-top: clamp(96px, 12vw, 140px);
-    /* keep in sync with STAGGER in js/process.js (52px × 3 steps) */
-    --process-stagger-total: 156px;
+    /* overlap step between cards AND the sticky-duration unit (see
+       .process__card-slot) — smaller on narrow screens, below */
+    --process-peek: 60px;
 }
 
 .process {
@@ -1373,24 +1380,19 @@ body {
     color: var(--white);
 }
 
-/* =================================================================
-   TRACK — desktop/tablet: the pinned stage. Only as tall as ONE
-   card; js/process.js's ScrollTrigger (pin:true) reserves the extra
-   scroll room automatically (its "pin-spacer"), proportional to the
-   number of cards — no manual height math needed here.
-   ================================================================= */
 .process__track {
-    position: relative;
-    height: clamp(460px, 80vh, 780px);
-    /* reserves room for the fanned peek: later cards sit
-       --process-stagger-total lower than the track's own box */
-    margin-bottom: var(--process-stagger-total);
+    display: flex;
+    flex-direction: column;
+}
+
+.process__card-slot {
+    position: sticky;
+    top: calc(var(--process-top) + var(--index) * var(--process-peek));
+    /* 3 = last card's index (4 cards total) — the last slot gets 0 */
+    padding-bottom: calc((3 - var(--index)) * var(--process-peek));
 }
 
 .process__card {
-    position: absolute;
-    inset: 0;
-    z-index: calc(var(--index, 0) + 1);
     padding: clamp(32px, 4vw, 56px) clamp(20px, 3vw, 40px);
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -1399,9 +1401,6 @@ body {
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
     background: var(--bg-void);
-    transform-origin: 50% 100%;
-    will-change: transform;
-    overflow: hidden;
 }
 
 .process__num {
@@ -1487,24 +1486,23 @@ body {
 }
 
 /* =================================================================
-   NARROW SCREENS — same pinned scroll-stacking effect as desktop
-   (js/process.js runs it at every width). Only the card's INTERNAL
-   layout changes: the 3-column grid (number | title+tag+list |
-   description) is far too tight under ~720px, so it collapses to a
-   single stacked column there. The positioning mechanic itself
-   (position:absolute, inset:0) stays untouched.
+   NARROW SCREENS — same sticky-stacking mechanic (it's plain CSS, it
+   just works at every width), only tuned down: a smaller peek/dwell
+   step keeps the overlap and per-card scroll distance from feeling
+   oversized on a short, narrow viewport. Only the card's INTERNAL
+   layout otherwise changes: the 3-column grid (number | title+tag+
+   list | description) is far too tight under ~720px, so it collapses
+   to a single stacked column there.
    ================================================================= */
 @media (max-width: 720px) {
-    .process__track {
-        /* single-column content is taller — give it more room */
-        height: clamp(560px, 94vh, 780px);
+    .process {
+        --process-peek: 36px;
     }
 
     .process__card {
         grid-template-columns: 1fr;
         row-gap: 20px;
         padding: 28px 20px;
-        overflow-y: auto;
     }
 
     .process__num,
@@ -1528,23 +1526,19 @@ body {
 }
 
 /* =================================================================
-   Reduced motion — keep the cards readable in normal flow; the
-   scroll-driven stacking never runs (js/process.js checks this same
-   query before touching GSAP).
+   Reduced motion — drop the sticky stacking entirely (it's a layout
+   effect, not a transition, but the overlap itself still reads as
+   motion while scrolling) and fall back to a plain, fully static
+   vertical list.
    ================================================================= */
 @media (prefers-reduced-motion: reduce) {
     .process__track {
-        height: auto;
-        margin-bottom: 0;
-        display: flex;
-        flex-direction: column;
         gap: 20px;
     }
 
-    .process__card {
+    .process__card-slot {
         position: static;
-        inset: auto;
-        transform: none !important;
+        padding-bottom: 0;
     }
 }
 

@@ -384,10 +384,20 @@
         var items = section.querySelectorAll("[data-tilt]");
         items.forEach(function (el) {
             var inner = el.querySelector(".visual__inner");
-            el.addEventListener("pointermove", function (e) {
+            var ticking = false;
+            var clientX = 0, clientY = 0;
+
+            // Same rAF-batching pattern as the scroll loop above: a
+            // high-poll-rate mouse/trackpad can fire pointermove several
+            // times per frame, and each one here does a layout read
+            // (getBoundingClientRect) plus a couple of style writes —
+            // running that straight off the event instead of once per
+            // frame repeats work the browser is about to throw away.
+            function apply() {
+                ticking = false;
                 var r = el.getBoundingClientRect();
-                var x = (e.clientX - r.left) / r.width;
-                var y = (e.clientY - r.top) / r.height;
+                var x = (clientX - r.left) / r.width;
+                var y = (clientY - r.top) / r.height;
                 var max = 6;
                 inner.style.transition = "none";
                 inner.dataset.tx = ((x - 0.5) * max).toFixed(1);
@@ -395,8 +405,18 @@
                 applyInner(inner);
                 el.style.setProperty("--glow-x", (x * 100).toFixed(0) + "%");
                 el.style.setProperty("--glow-y", (y * 100).toFixed(0) + "%");
+            }
+
+            el.addEventListener("pointermove", function (e) {
+                clientX = e.clientX;
+                clientY = e.clientY;
+                if (!ticking) {
+                    ticking = true;
+                    requestAnimationFrame(apply);
+                }
             });
             el.addEventListener("pointerleave", function () {
+                ticking = false;
                 inner.style.transition = "transform .5s cubic-bezier(.16,.8,.3,1)";
                 inner.dataset.tx = 0;
                 inner.dataset.ty = 0;
