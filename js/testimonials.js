@@ -16,17 +16,6 @@
         return Math.max(track.scrollWidth - viewport.clientWidth, 0);
     }
 
-    // clearance below the floating nav pill — pinning at literal
-    // "top top" would slam the heading flush against the viewport's
-    // top edge, underneath the nav, instead of settling into a clean,
-    // fully-visible resting spot. Custom properties don't resolve to
-    // px through getComputedStyle (they stay the raw "clamp(...)"
-    // string), so this mirrors --testimonials-top's clamp() in JS
-    // directly — keep the two in sync if either changes.
-    function navOffset() {
-        return Math.min(Math.max(window.innerWidth * 0.11, 90), 132);
-    }
-
     function build() {
         if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
 
@@ -80,7 +69,13 @@
                 ease: "none",
                 scrollTrigger: {
                     trigger: section,
-                    start: function () { return "top top+=" + navOffset(); },
+                    // Pins (and the horizontal scrub starts) only once the
+                    // section reaches the middle of the screen, not as soon
+                    // as it touches the top — on shorter viewports (e.g.
+                    // 1280x720), the section's own height pinned flush to
+                    // the top overshot the bottom edge, clipping the cards.
+                    // Centered, it always has breathing room on both sides.
+                    start: "center center",
                     end: function () { return "+=" + maxX(); },
                     scrub: 1,
                     pin: true,

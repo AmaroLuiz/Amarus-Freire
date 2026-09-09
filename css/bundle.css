@@ -1931,12 +1931,6 @@ body {
    Both live in js/testimonials.js as separate gsap.matchMedia()
    branches so only one is ever active.
    ================================================================= */
-:root {
-    /* clearance so the pin engages below the floating nav pill,
-       instead of slamming the heading flush against the top edge */
-    --testimonials-top: clamp(90px, 11vw, 132px);
-}
-
 .testimonials {
     position: relative;
     background: var(--bg-void);
