@@ -1,10 +1,12 @@
 @charset "UTF-8";
 
 /* =================================================================
-   PRELOADER — brand entrance. The mark itself "opens" the site
-   (rotate + scale into an impact zoom) instead of a generic spinner.
-   Locked to prefers-reduced-motion and removed from the DOM once
-   played, so it never lingers to block layout or clicks.
+   PRELOADER — brand entrance. Mark slides in from the right, then
+   each line of the wordmark follows, settling into the final
+   lockup. Once the site has loaded, the mark grows to fill the
+   screen, opening onto the hero. Locked to prefers-reduced-motion
+   and removed from the DOM once played, so it never lingers to
+   block layout or clicks.
    ================================================================= */
 html.is-preloading,
 html.is-preloading body {
@@ -19,19 +21,45 @@ html.is-preloading body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: radial-gradient(circle at center, #161616 0%, #0D0D0D 30%, #050505 60%, #000000 100%);
+    background: linear-gradient(135deg, #1961E7 0%, #9DA6C4 60%, #4961FF 100%);
 }
 
-.preloader__logo {
+.preloader__lockup {
+    display: flex;
+    align-items: center;
+    gap: clamp(16px, 3vw, 32px);
+}
+
+.preloader__mark {
     display: block;
-    width: clamp(96px, 20vw, 180px);
+    width: clamp(100px, 17vw, 190px);
     height: auto;
-    transform: scale(0.5);
+    opacity: 0;
     will-change: transform, opacity;
 }
 
+.preloader__wordmark {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(4px, 1vw, 10px);
+}
+
+.preloader__word {
+    display: block;
+    width: clamp(200px, 30vw, 380px);
+    height: auto;
+    opacity: 0;
+    will-change: transform, opacity;
+}
+
+.preloader__word--freire {
+    width: clamp(170px, 25.5vw, 323px);
+}
+
 @media (prefers-reduced-motion: reduce) {
-    .preloader__logo {
+
+    .preloader__mark,
+    .preloader__word {
         transform: none;
     }
 }

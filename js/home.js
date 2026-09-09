@@ -76,8 +76,24 @@
             if (!reduceMotion) { raf = requestAnimationFrame(step); }
         }
 
-        resize();
-        step();
+        function start() {
+            resize();
+            step();
+        }
+
+        // The preloader overlay sits opaque on top of this canvas while it
+        // plays, so running the constellation loop during that phase is
+        // pure wasted work — and it competes with the preloader's own
+        // animation for the same frames, making the entrance feel janky.
+        if (document.documentElement.classList.contains("is-preloading")) {
+            var started = false;
+            var startOnce = function () { if (started) return; started = true; start(); };
+            window.addEventListener("preloader:done", startOnce, { once: true });
+            setTimeout(startOnce, 8000);
+        } else {
+            start();
+        }
+
         window.addEventListener("resize", debounce(function () { resize(); if (!raf) step(); }, 150));
 
         var io = new IntersectionObserver(function (entries) {
@@ -295,12 +311,26 @@
         window.__flowRebuild = rebuild;
         window.__flowUpdate = updateFlow;
 
-        // rebuild once fonts/layout have settled
-        window.addEventListener("load", rebuild);
-        if (document.fonts && document.fonts.ready) {
-            document.fonts.ready.then(rebuild);
+        // rebuild once fonts/layout have settled. The SVG sits behind the
+        // opaque preloader while it plays, so hold off until it's gone —
+        // this does 11 layout reads plus 181 getPointAtLength() calls,
+        // which is real main-thread work to stack on top of the preloader's
+        // own entrance animation for zero visible benefit.
+        function scheduleRebuild() {
+            window.addEventListener("load", rebuild);
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(rebuild);
+            }
+            setTimeout(rebuild, 50);
         }
-        setTimeout(rebuild, 50);
+        if (document.documentElement.classList.contains("is-preloading")) {
+            var rebuildScheduled = false;
+            var scheduleOnce = function () { if (rebuildScheduled) return; rebuildScheduled = true; scheduleRebuild(); };
+            window.addEventListener("preloader:done", scheduleOnce, { once: true });
+            setTimeout(scheduleOnce, 8000);
+        } else {
+            scheduleRebuild();
+        }
 
         var ro = new ResizeObserver(debounce(rebuild, 120));
         ro.observe(section);

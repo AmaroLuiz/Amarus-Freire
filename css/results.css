@@ -220,6 +220,16 @@
     margin-right: 4px;
 }
 
+/* small attribution for the external stat each card leans on — the
+   whole point of moving off fabricated case-study numbers */
+.results__source {
+    margin: 4px 0 0;
+    font-family: var(--font-body);
+    font-size: 11px;
+    line-height: 1.5;
+    color: #8A8D94;
+}
+
 .results__cta {
     font-family: var(--font-mono);
     font-size: 12px;

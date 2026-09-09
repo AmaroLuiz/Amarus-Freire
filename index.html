@@ -42,6 +42,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="image" href="imagens/hero_banner_blue.webp" fetchpriority="high">
   <link rel="preload" as="image" href="imagens/logo.svg" fetchpriority="high">
+  <link rel="preload" as="image" href="imagens/amarus.png" fetchpriority="high">
+  <link rel="preload" as="image" href="imagens/freire.png" fetchpriority="high">
   <link
     href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap"
     rel="stylesheet">
@@ -80,7 +82,13 @@
 <body>
 
   <div id="preloader" aria-hidden="true">
-    <img class="preloader__logo" src="imagens/logo.svg" alt="" width="180" height="180" decoding="async">
+    <div class="preloader__lockup">
+      <img class="preloader__mark" src="imagens/logo.svg" alt="" width="196" height="170" decoding="async">
+      <div class="preloader__wordmark">
+        <img class="preloader__word preloader__word--amarus" src="imagens/amarus.png" alt="" width="921" height="133" decoding="async">
+        <img class="preloader__word preloader__word--freire" src="imagens/freire.png" alt="" width="746" height="128" decoding="async">
+      </div>
+    </div>
   </div>
 
   <header class="nav" id="nav">
@@ -914,84 +922,87 @@
     <section class="results" id="results" aria-labelledby="results-heading">
       <div class="results__inner">
         <div class="results__head">
-          <h2 id="results-heading" class="results__title">Resultados que falam por si</h2>
-          <p class="results__subtitle">Não falamos apenas sobre resultados. Mostramos o que o nosso trabalho foi capaz
-            de entregar na prática.
+          <h2 id="results-heading" class="results__title">O que os dados já provam</h2>
+          <p class="results__subtitle">Não inventamos número. Aplicamos o que estudos e o mercado já comprovam sobre
+            o que realmente move um negócio.
           </p>
         </div>
 
         <div class="results__row">
 
-          <a class="results__card" href="#solutions" aria-label="Ver projeto: Landing Page — +42% de conversão" data-reveal style="--i:0">
+          <a class="results__card" href="#solutions" aria-label="Presença digital — 75% julgam a credibilidade de uma empresa pelo design do site" data-reveal style="--i:0">
             <div class="results__compact">
-              <span class="results__cat">Landing Page</span>
+              <span class="results__cat">Presença Digital</span>
               <svg class="results__spark" viewBox="0 0 120 48" fill="none" aria-hidden="true">
                 <polyline points="0,40 20,32 40,36 60,20 80,24 100,8 120,4" stroke="#155EE7" stroke-width="2.2"
                   fill="none" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
               <div class="results__metric-block">
-                <span class="results__metric">+42%</span>
-                <span class="results__metric-label">Conversão</span>
+                <span class="results__metric">75%</span>
+                <span class="results__metric-label">julgam a empresa pelo design do site</span>
               </div>
             </div>
             <div class="results__expand">
-              <p class="results__desc">Landing page desenvolvida para aumentar a geração de leads e melhorar a
-                apresentação da oferta.</p>
+              <p class="results__desc">Antes de decidir comprar, o cliente decide se confia, e isso começa na
+                primeira impressão do seu site.</p>
               <ul class="results__stats">
-                <li style="--i:0"><span>+42%</span> conversão</li>
-                <li style="--i:1"><span>+68%</span> leads</li>
-                <li style="--i:2"><span>-31%</span> custo por lead</li>
+                <li style="--i:0"><span>75%</span> julgam a credibilidade pelo design do site</li>
+                <li style="--i:1"><span>94%</span> da primeira impressão é sobre o design</li>
+                <li style="--i:2"><span>0,05s</span> para essa impressão se formar</li>
               </ul>
+              <p class="results__source">Fonte: Stanford Web Credibility Research</p>
             </div>
           </a>
 
-          <a class="results__card" href="#solutions" aria-label="Ver projeto: E-commerce — +85% de vendas" data-reveal style="--i:1">
+          <a class="results__card" href="#solutions" aria-label="Automação de processos — 30% mais produtividade em equipes" data-reveal style="--i:1">
             <div class="results__compact">
-              <span class="results__cat">AUTOMAtize PROCESSOS</span>
+              <span class="results__cat">Automação de Processos</span>
               <svg class="results__spark" viewBox="0 0 120 48" fill="none" aria-hidden="true">
                 <polyline points="0,8 20,16 40,12 60,26 80,22 100,36 120,40" stroke="#155EE7" stroke-width="2.2"
                   fill="none" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
               <div class="results__metric-block">
-                <span class="results__metric">−70%</span>
-                <span class="results__metric-label">Tarefas manuais</span>
+                <span class="results__metric">30%</span>
+                <span class="results__metric-label">mais produtividade com automação</span>
               </div>
             </div>
             <div class="results__expand">
-              <p class="results__desc">Processos repetitivos automatizados para reduzir trabalho manual,
-                diminuir erros e devolver horas para a equipe.</p>
+              <p class="results__desc">Tarefas repetitivas automatizadas devolvem tempo de sobra pro que realmente
+                importa: vender, atender e crescer.</p>
               <ul class="results__stats">
-                <li style="--i:0"><span>-70%</span> tarefas manuais</li>
-                <li style="--i:1"><span>18h</span> economizadas / mês</li>
-                <li style="--i:2"><span>-45%</span> erros operacionais</li>
+                <li style="--i:0"><span>30%</span> mais produtividade com automação de fluxo</li>
+                <li style="--i:1"><span>21%</span> mais satisfação do cliente</li>
+                <li style="--i:2"><span>19%</span> mais produtividade da equipe</li>
               </ul>
+              <p class="results__source">Fonte: Forrester Research / Zebra Technologies + Oxford Economics</p>
             </div>
           </a>
 
-          <a class="results__card" href="#solutions" aria-label="Ver projeto: Automação — atendimento 24h" data-reveal style="--i:2">
+          <a class="results__card" href="#solutions" aria-label="Atendimento automatizado — 50% esperam disponibilidade 24 horas" data-reveal style="--i:2">
             <div class="results__compact">
-              <span class="results__cat">INTEGRAÇÕES</span>
+              <span class="results__cat">Atendimento Automatizado</span>
               <svg class="results__spark" viewBox="0 0 120 48" fill="none" aria-hidden="true">
                 <polyline points="0,32 20,34 40,20 60,24 80,10 100,16 120,6" stroke="#155EE7" stroke-width="2.2"
                   fill="none" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
               <div class="results__metric-block">
-                <span class="results__metric">8+</span>
-                <span class="results__metric-label">Ferramentas conectadas</span>
+                <span class="results__metric">50%</span>
+                <span class="results__metric-label">esperam atendimento 24h</span>
               </div>
             </div>
             <div class="results__expand">
-              <p class="results__desc">Fluxo de atendimento automatizado que qualifica leads e responde clientes em
-                tempo real, todos os dias.</p>
+              <p class="results__desc">Quem demora a responder perde venda pra quem responde rápido, um atendimento
+                automatizado cobre isso fora do horário comercial.</p>
               <ul class="results__stats">
-                <li style="--i:0"><span>8+</span> ferramentas integradas</li>
-                <li style="--i:1"><span>−60%</span> lançamentos manuais</li>
-                <li style="--i:2"><span>100%</span> dados sincronizados</li>
+                <li style="--i:0"><span>50%</span> esperam disponibilidade 24/7</li>
+                <li style="--i:1"><span>32%</span> apontam isso como prioridade no atendimento</li>
+                <li style="--i:2">Dúvidas recorrentes resolvidas sem <span>sobrecarregar a equipe</span></li>
               </ul>
+              <p class="results__source">Fonte: Oracle / CX Trends</p>
             </div>
           </a>
 
-          <a class="results__card" href="#solutions" aria-label="Ver projeto: Tráfego Pago — 3.2x de ROAS" data-reveal style="--i:3">
+          <a class="results__card" href="#solutions" aria-label="Tráfego pago — 3x é o ROAS considerado saudável no mercado" data-reveal style="--i:3">
             <div class="results__compact">
               <span class="results__cat">Tráfego Pago</span>
               <svg class="results__spark" viewBox="0 0 120 48" fill="none" aria-hidden="true">
@@ -999,45 +1010,47 @@
                   fill="none" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
               <div class="results__metric-block">
-                <span class="results__metric">3.2x</span>
-                <span class="results__metric-label">ROAS</span>
+                <span class="results__metric">3x</span>
+                <span class="results__metric-label">ROAS considerado saudável</span>
               </div>
             </div>
             <div class="results__expand">
-              <p class="results__desc">Campanhas de performance reestruturadas com foco em público qualificado e
-                criativos de alta conversão.</p>
+              <p class="results__desc">Anúncio bem segmentado é o que separa investimento lucrativo de orçamento
+                desperdiçado.</p>
               <ul class="results__stats">
-                <li style="--i:0"><span>3.2x</span> ROAS</li>
-                <li style="--i:1"><span>-28%</span> CPA</li>
-                <li style="--i:2"><span>+61%</span> cliques qualificados</li>
+                <li style="--i:0"><span>3x</span> é o ROAS considerado saudável em e-commerce</li>
+                <li style="--i:1"><span>2:1</span> abaixo disso, o retorno raramente cobre o investimento</li>
+                <li style="--i:2">Segmentação de público sustenta o <span>retorno</span>, não o orçamento</li>
               </ul>
+              <p class="results__source">Fonte: benchmarks de mercado (Google Ads / Meta Ads)</p>
             </div>
           </a>
 
-          <a class="results__card" href="#solutions" aria-label="Ver projeto: Dashboard — -60% no tempo de análise" data-reveal style="--i:4">
+          <a class="results__card" href="#solutions" aria-label="Dados e dashboards — 13 milissegundos para o cérebro processar uma imagem" data-reveal style="--i:4">
             <div class="results__compact">
-              <span class="results__cat">Dashboard</span>
+              <span class="results__cat">Dados &amp; Dashboards</span>
               <svg class="results__spark" viewBox="0 0 120 48" fill="none" aria-hidden="true">
                 <polyline points="0,8 20,16 40,12 60,26 80,22 100,36 120,40" stroke="#155EE7" stroke-width="2.2"
                   fill="none" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
               <div class="results__metric-block">
-                <span class="results__metric">-60%</span>
-                <span class="results__metric-label">Tempo de análise</span>
+                <span class="results__metric">13ms</span>
+                <span class="results__metric-label">para o cérebro processar uma imagem</span>
               </div>
             </div>
             <div class="results__expand">
-              <p class="results__desc">Painel de dados unificando métricas de vendas, marketing e operação em um só
-                lugar, em tempo real.</p>
+              <p class="results__desc">Decisão boa começa com informação clara, um painel bem feito transforma
+                dado bruto em resposta rápida.</p>
               <ul class="results__stats">
-                <li style="--i:0"><span>-60%</span> tempo de análise</li>
-                <li style="--i:1"><span>+100%</span> visibilidade</li>
-                <li style="--i:2">decisões <span>em tempo real</span></li>
+                <li style="--i:0"><span>13ms</span> é o tempo que o cérebro leva pra processar uma imagem</li>
+                <li style="--i:1">Decisão sem dado gera <span>retrabalho</span> e prazo estourado</li>
+                <li style="--i:2">Dado acessível evita decisão no <span>achismo</span></li>
               </ul>
+              <p class="results__source">Fonte: Potter et al., estudo de percepção visual</p>
             </div>
           </a>
 
-          <a class="results__card" href="#solutions" aria-label="Ver projeto: Redes Sociais — +180% de engajamento" data-reveal style="--i:5">
+          <a class="results__card" href="#solutions" aria-label="Redes sociais — 40% mais alcance orgânico com conteúdo que gera conversa" data-reveal style="--i:5">
             <div class="results__compact">
               <span class="results__cat">Redes Sociais</span>
               <svg class="results__spark" viewBox="0 0 120 48" fill="none" aria-hidden="true">
@@ -1045,18 +1058,19 @@
                   fill="none" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
               <div class="results__metric-block">
-                <span class="results__metric">+100%</span>
-                <span class="results__metric-label">Engajamento</span>
+                <span class="results__metric">40%</span>
+                <span class="results__metric-label">mais alcance com conteúdo relevante</span>
               </div>
             </div>
             <div class="results__expand">
-              <p class="results__desc">Estratégia de conteúdo reestruturada para aumentar alcance orgânico e
-                fortalecer a autoridade da marca.</p>
+              <p class="results__desc">Consistência e conteúdo relevante constroem autoridade, mas o orgânico sustenta
+                tudo o que vem depois.</p>
               <ul class="results__stats">
-                <li style="--i:0"><span>+100%</span> engajamento</li>
-                <li style="--i:1"><span>+65%</span> seguidores</li>
-                <li style="--i:2"><span>3x</span> alcance orgânico</li>
+                <li style="--i:0"><span>40%</span> mais alcance orgânico com conteúdo que gera conversa</li>
+                <li style="--i:1"><span>87%</span> dos profissionais usam redes sociais pra construir marca</li>
+                <li style="--i:2">Regularidade sustenta <span>crescimento orgânico</span> consistente</li>
               </ul>
+              <p class="results__source">Fonte: RD Station / VaynerX + Ipsos</p>
             </div>
           </a>
 
@@ -1505,8 +1519,8 @@
   <script src="js/footer.js" defer></script>
 
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
   <script src="js/preloader.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
   <script src="js/testimonials.js" defer></script>
   <script src="js/faq.js" defer></script>
   <script src="js/cta.js" defer></script>
