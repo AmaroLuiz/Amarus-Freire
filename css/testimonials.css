@@ -1,17 +1,21 @@
 @charset "UTF-8";
 
 /* =================================================================
-   TESTIMONIALS — scroll-driven horizontal track (desktop). The
-   section pins in the viewport (GSAP ScrollTrigger, pin:true) and
-   the vertical scroll the user keeps doing is scrubbed 1:1 into
-   .testimonials__track's translateX, right → left, until the last
-   card is fully visible — then the section unpins and the page
-   continues normally. See js/testimonials.js.
+   TESTIMONIALS — two different horizontal behaviors, split at the
+   same 861px breakpoint used elsewhere in the site:
 
-   Mobile-first: base styles are a plain, safe vertical column
-   (no pin, no horizontal scroll-jack) — the enhancement only kicks
-   in at the same 861px breakpoint used elsewhere in the site, and
-   only when the browser actually supports it.
+   - Mobile (base styles below): an auto-playing, infinitely looping
+     carousel. js/testimonials.js clones the card set once and tweens
+     .testimonials__track's x from 0 to -50% of its (now doubled)
+     width on a linear, repeat:-1 loop — since the clone is visually
+     identical to the original, the wrap is seamless.
+   - Desktop (min-width: 861px below): the section pins in the
+     viewport (GSAP ScrollTrigger, pin:true) and the vertical scroll
+     the user keeps doing is scrubbed 1:1 into the track's translateX
+     instead, until the last card is fully visible.
+
+   Both live in js/testimonials.js as separate gsap.matchMedia()
+   branches so only one is ever active.
    ================================================================= */
 :root {
     /* clearance so the pin engages below the floating nav pill,
@@ -56,21 +60,27 @@
     color: var(--white);
 }
 
-/* -------- mobile-first: plain vertical column -------- */
+/* -------- mobile-first: infinite auto-scrolling carousel -------- */
 .testimonials__viewport {
-    overflow: visible;
+    overflow: hidden;
 }
 
 .testimonials__track {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 16px;
+    /* Promotes the track to its own compositor layer up front — the
+       mobile carousel tweens x continuously (repeat:-1), and without
+       this the browser can repaint on the main thread each frame
+       instead of just compositing, showing up as micro-stutter. */
+    will-change: transform;
 }
 
 .testimonials__card {
-    width: auto;
-    flex: none;
-    padding: 28px;
+    width: min(80vw, 340px);
+    flex: 0 0 min(80vw, 340px);
+    padding: 24px;
     border: 1px solid var(--border);
     border-radius: 2px;
     background:
@@ -164,7 +174,6 @@
         flex-direction: row;
         flex-wrap: nowrap;
         gap: clamp(24px, 2.6vw, 40px);
-        will-change: transform;
     }
 
     .testimonials__card {

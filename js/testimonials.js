@@ -33,9 +33,47 @@
         gsap.registerPlugin(ScrollTrigger);
         var mm = gsap.matchMedia();
 
-        // Only pin/scroll-jack on desktop-sized viewports (same breakpoint
-        // CSS uses to switch the track from a column to a row). Below it,
-        // testimonials.css keeps a plain, unpinned vertical column.
+        // Infinite auto-scrolling carousel below the desktop breakpoint.
+        // Clone the card set once so the track is exactly double width,
+        // then loop x from 0 to -50% — since the clone is identical to
+        // the original, the wrap-around is invisible.
+        mm.add("(max-width: 860px)", function () {
+            var originals = Array.prototype.slice.call(track.children);
+            originals.forEach(function (card) {
+                var clone = card.cloneNode(true);
+                clone.setAttribute("aria-hidden", "true");
+                track.appendChild(clone);
+            });
+
+            var loopWidth = track.scrollWidth / 2;
+            gsap.set(track, { x: 0 });
+
+            // ~70px/sec — fast enough to read as motion, slow enough to
+            // actually read a card's text as it drifts past. Runs
+            // continuously: the carousel isn't draggable (viewport is
+            // overflow:hidden), so there's no touch-pause here — the
+            // user's scroll gestures over the section are unrelated and
+            // shouldn't freeze the marquee.
+            var tween = gsap.to(track, {
+                x: -loopWidth,
+                duration: loopWidth / 70,
+                ease: "none",
+                repeat: -1,
+            });
+
+            // gsap.matchMedia() calls this automatically once the query
+            // stops matching, so the clones/tween never leak into desktop.
+            return function () {
+                tween.kill();
+                Array.prototype.slice.call(track.children, originals.length).forEach(function (el) {
+                    el.remove();
+                });
+                gsap.set(track, { clearProps: "x" });
+            };
+        });
+
+        // Pin/scroll-jack on desktop-sized viewports (same breakpoint CSS
+        // uses to switch the track from a row-carousel to the pinned row).
         mm.add("(min-width: 861px)", function () {
             gsap.to(track, {
                 x: function () { return -maxX(); },
