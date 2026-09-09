@@ -18,7 +18,11 @@
    ends right there, with no extra scroll tacked on.
    ================================================================= */
 :root {
-    --process-top: clamp(96px, 12vw, 140px);
+    /* Kept close to the floating nav's own height (~86px) plus a
+       little breathing room — this directly eats into how much
+       vertical room later cards have below their sticky point (see
+       .process__card below), so it stays lean on purpose. */
+    --process-top: clamp(96px, 10vw, 110px);
     /* overlap step between cards AND the sticky-duration unit (see
        .process__card-slot) — smaller on narrow screens, below */
     --process-peek: 60px;
@@ -74,7 +78,12 @@
 }
 
 .process__card {
-    padding: clamp(32px, 4vw, 56px) clamp(20px, 3vw, 40px);
+    /* Vertical padding trimmed down from what it was — every px here
+       eats into the room a card has below its own sticky point (see
+       --process-top above), and this is the single biggest lever for
+       keeping the card's total height inside that budget on shorter
+       screens without clipping anything. */
+    padding: clamp(24px, 3vw, 36px) clamp(20px, 3vw, 40px);
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: start;
@@ -98,7 +107,10 @@
     grid-column: 2;
     display: flex;
     flex-direction: column;
-    gap: clamp(28px, 4vw, 52px);
+    /* Same reasoning as .process__card's padding above — trimmed
+       from clamp(28px, 4vw, 52px) so title→tag→list breathing room
+       doesn't outgrow the card's own height budget on wide screens. */
+    gap: clamp(18px, 2.4vw, 30px);
     min-width: 0;
 }
 
@@ -111,7 +123,7 @@
 .process__card-title {
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: clamp(32px, 4.2vw, 64px);
+    font-size: clamp(28px, 3.4vw, 52px);
     line-height: 1;
     letter-spacing: -0.02em;
     margin: 0;
