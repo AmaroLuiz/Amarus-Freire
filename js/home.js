@@ -355,7 +355,11 @@
 
     (function scrollLoop() {
         var ticking = false;
-        var inners = Array.prototype.slice.call(section.querySelectorAll(".visual__inner"));
+        // var inners = Array.prototype.slice.call(section.querySelectorAll(".visual__inner"));
+        // Automação cards (au-wide/au-tall/au-sq) opt out of the scroll
+        // parallax — their images should stay still, not drift on scroll.
+        var inners = Array.prototype.slice.call(section.querySelectorAll(".visual__inner"))
+            .filter(function (inner) { return !inner.closest(".au-wide, .au-tall, .au-sq"); });
 
         function frame() {
             ticking = false;
@@ -411,7 +415,11 @@
        ============================================================= */
     (function tilt() {
         if (reduceMotion) return;
-        var items = section.querySelectorAll("[data-tilt]");
+        // var items = section.querySelectorAll("[data-tilt]");
+        // Automação cards (au-wide/au-tall/au-sq) opt out of the mouse
+        // tilt — their images should stay still, not follow the cursor.
+        var items = Array.prototype.slice.call(section.querySelectorAll("[data-tilt]"))
+            .filter(function (el) { return !el.closest(".au-wide, .au-tall, .au-sq"); });
         items.forEach(function (el) {
             var inner = el.querySelector(".visual__inner");
             var ticking = false;

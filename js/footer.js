@@ -23,3 +23,8 @@
 
     targets.forEach(function (el) { io.observe(el); });
 })();
+
+(function copyrightYear() {
+    var yearEl = document.getElementById("copyright-year");
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+})();
